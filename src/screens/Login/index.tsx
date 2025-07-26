@@ -29,6 +29,10 @@ const Login = () => {
                     <View style={GlobalStyles.inputWrapper}>
                         <Text>Email</Text>
                         <TextInput 
+                            autoCapitalize="none"
+                            keyboardType="email-address"
+                            autoComplete="off"
+                            autoCorrect={false}
                             style={GlobalStyles.input} 
                             placeholder="Enter email address" 
                             placeholderTextColor="#b5b5b5"
@@ -40,6 +44,7 @@ const Login = () => {
                             style={GlobalStyles.input} 
                             placeholder="Enter password" 
                             placeholderTextColor="#b5b5b5"
+                            secureTextEntry={true}
                             onChangeText={(val: string) => _onChangeInputValue(val, 'password')} />
                     </View>
                     <Button label="Login" onPress={_onLogin} />
