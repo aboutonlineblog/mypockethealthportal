@@ -1,5 +1,5 @@
-import {users} from "../mocks/users";
-import {LoginProps} from "../screens/Login/interafaces";
+import {users} from "@/mocks/users";
+import {LoginProps} from "@/screens/Login/interafaces";
 
 export const loginApi = async (email: string, password: string) => {
     if(!email || !password) {

@@ -8,9 +8,9 @@ import {
     Platform, TextInput
 } from "react-native";
 import {useStyles} from "./index.styles";
-import {useGlobalStyles} from "../../config/globalStyles.styles";
-import {APP_TITLE} from "../../config/app";
-import Button from "../../modules/Button";
+import {useGlobalStyles} from "@/config/globalStyles.styles";
+import {APP_TITLE} from "@/config/app";
+import Button from "@/modules/Button";
 import {useLoginHooks} from "./hooks";
 
 const Login = () => {

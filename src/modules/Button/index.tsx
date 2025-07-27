@@ -1,6 +1,6 @@
 import React from "react";
 import {View, Text, TouchableOpacity} from "react-native";
-import {useGlobalStyles} from "../../config/globalStyles.styles";
+import {useGlobalStyles} from "@/config/globalStyles.styles";
 
 interface ButtonProps {
     label?: string;

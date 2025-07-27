@@ -1,7 +1,7 @@
 import React from "react";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Colors} from '../../config/theme';
+import {Colors} from '@/config/theme';
 
 /** TABS */
 import AppsTab from "./Tabs/AppsTab";
