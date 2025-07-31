@@ -7,18 +7,21 @@ export default [
         id: 1,
         name: "Fasting Tracker",
         description: "",
-        background: FastingImage
+        background: FastingImage,
+        route: 'FastingTracker'
     },
     {
         id: 2,
         name: "Steps Tracker",
         description: "",
-        background: WalkingImage
+        background: WalkingImage,
+        route: 'StepsTracker'
     },
     {
         id: 3,
         name: "Meal Planner",
         description: "",
-        background: MealPlanImage
+        background: MealPlanImage,
+        route: 'MealPlanner'
     }
 ]
