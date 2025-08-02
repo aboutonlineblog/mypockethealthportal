@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {Alert} from "react-native";
-import {CommonActions} from '@react-navigation/native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import {useMutation, UseMutationResult} from "@tanstack/react-query";
 import {loginApi} from "@/api/login";
 import {LoginProps} from "./interafaces";

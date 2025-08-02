@@ -8,6 +8,10 @@ import DashboardScreen from "@/screens/Dashboard";
 import FastingTrackerScreen from "@/screens/FastingTracker";
 import StepsTrackerScreen from "@/screens/StepsTracker";
 import MealPlannerScreen from "@/screens/MealPlanner";
+import AccountProfileScreen from "@/screens/AccountProfile";
+import ContactUsScreen from "@/screens/ContactUs";
+import TermsOfUseScreen from "@/screens/TermsOfUse";
+import PrivacyPolicyScreen from "@/screens/PrivacyPolicy";
 
 const RootStack = createNativeStackNavigator({
     initialRouteName: "Login",
@@ -41,7 +45,31 @@ const RootStack = createNativeStackNavigator({
             options: {
                 headerTitle: "Meal Planner"
             }
-        }
+        },
+        AccountProfile: {
+            screen: AccountProfileScreen,
+            options: {
+                headerTitle: "Account Profile"
+            }
+        },
+        ContactUs: {
+            screen: ContactUsScreen,
+            options: {
+                headerTitle: "Contact Us"
+            }
+        },
+        TermsOfUse: {
+            screen: TermsOfUseScreen,
+            options: {
+                headerTitle: "Terms Of Use"
+            }
+        },
+        PrivacyPolicy: {
+            screen: PrivacyPolicyScreen,
+            options: {
+                headerTitle: "Privacy Policy"
+            }
+        },
     },
 });
 

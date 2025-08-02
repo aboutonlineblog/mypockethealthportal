@@ -33,6 +33,6 @@ export default [
         id: 6,
         name: "Logout",
         description: "",
-        route: null
+        route: 'logout'
     }
 ]
