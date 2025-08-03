@@ -32,6 +32,17 @@ export const useGlobalStyles = () => {
         buttonLabel: {
             fontWeight: 'bold',
             color: Colors.button_label_color_normal
+        },
+
+        /** SPACES */
+        mVSpace20: {
+            marginHorizontal: 20
+        },
+        mRightSpace20: {
+            marginRight: 20
+        },
+        mLeftSpace20: {
+            marginLeft: 20
         }
     })
 }

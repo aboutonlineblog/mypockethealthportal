@@ -6,7 +6,19 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 /** NAVIGATIONS */
 import Navigation from "@/Navigation";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: Infinity,
+            gcTime: Infinity,
+            retry: 5,
+            refetchOnWindowFocus: true,
+        },
+        mutations: {
+            retry: 5,
+        }
+    }
+});
 
 const MyPocketHealthPortal = () => {
     return (
