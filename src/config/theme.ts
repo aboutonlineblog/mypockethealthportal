@@ -4,5 +4,6 @@ export const Colors = {
     button_label_color_normal: '#fff',
     tab_active_color: '#0082ed',
     border_color: '#d7d7d9',
-    app_bg_color: '#f5f5f5'
+    app_bg_color: '#f5f5f5',
+    stop_color: '#f26822'
 }
