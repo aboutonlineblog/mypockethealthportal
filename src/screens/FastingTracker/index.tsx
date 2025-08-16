@@ -9,7 +9,14 @@ import {useFastingTrackerHooks} from "./hooks";
 
 const FastingTracker = () => {
     const Styles = useStyles();
-    const {_onStartFasting, startFasting} = useFastingTrackerHooks();
+    const {
+        _onStartFasting, 
+        startFasting, 
+        seconds,
+        minutes,
+        hours,
+        days
+    } = useFastingTrackerHooks();
 
     return (
         <SafeAreaProvider>
@@ -24,11 +31,18 @@ const FastingTracker = () => {
                             sliceColor={[Colors.tab_active_color, Colors.border_color]}
                             coverRadius={0.7} />
 
-                            <Text style={Styles.timerLabel}>
+                            {days < 1 ? (<Text style={Styles.timerLabel}>
                                 <Text style={Styles.timeElapsedLabel}>{`elapsed time (80%)`}</Text>{'\n'}
-                                00 : 00 : 00
+                                {hours < 10 ? `0${hours}` : hours} : {minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}
                                 {'\n'}<Text style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: 16 HOURS`}</Text>
-                            </Text>
+                            </Text>) : (
+                                <Text style={Styles.timerLabel}>
+                                    <Text style={Styles.timeElapsedLabel}>{`elapsed time (80%)`}</Text>{'\n'}
+                                    {days < 10 ? `0${days}` : days} : {hours < 10 ? `0${hours}` : hours} : {minutes < 10 ? `0${minutes}` : minutes}
+                                    <Text style={Styles.secondsSmall}>{' '}{seconds < 10 ? `0${seconds}` : seconds}</Text>
+                                    {'\n'}<Text style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: 16 HOURS`}</Text>
+                                </Text>
+                            )}
                         </View>
 
                         <TouchableOpacity style={startFasting ? Styles.stopBtn : Styles.startBtn} onPress={_onStartFasting}>

@@ -121,6 +121,9 @@ export const useStyles = () => {
             backgroundColor: Colors.tab_active_color,
             position: 'absolute',
             zIndex: 0
+        },
+        secondsSmall: {
+            fontSize: 14
         }
     })
 }
