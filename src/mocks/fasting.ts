@@ -10,7 +10,8 @@ export const fasting = [
         updated_at: new Date().setHours(new Date().getHours() - 5),
         goal: {
             time_value: 16,
-            time_type: 'hour'
+            time_type: 'hour',
+            time_int: new Date().setHours(new Date().getHours() - 16) // this is time in milliseconds
         }
     },
     {
@@ -24,7 +25,8 @@ export const fasting = [
         updated_at: new Date().setHours(new Date().getHours() - 5),
         goal: {
             time_value: 16,
-            time_type: 'hour'
+            time_type: 'hour',
+            time_int: new Date().setHours(new Date().getHours() - 16) // this is time in milliseconds
         }
     },
 ]

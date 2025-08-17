@@ -1,9 +1,10 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect, useMemo} from "react";
 import {Alert} from "react-native";
 import _ from "underscore";
 import {useQueryClient} from "@tanstack/react-query";
 import {useNavigation, NavigationProp} from '@react-navigation/native';
 import {FastingTrackerSubNavi} from "./interafaces";
+import {getTotalSeconds} from "@/helpers/DayTimeFormat";
 
 export const useFastingTrackerHooks = () => {
     /** HOOKS */
@@ -13,21 +14,70 @@ export const useFastingTrackerHooks = () => {
     /** STATES */
     const [startFasting, setStartFasting] = useState<boolean>(false);
     const [seconds, setSeconds] = useState<number>(0);
+    const [totalSecondsElapsed, setTotalSecondsElapsed] = useState<number>(0);
     const [minutes, setMinutes] = useState<number>(0);
     const [hours, setHours] = useState<number>(0);
     const [days, setDays] = useState<number>(0);
-    const [goal, setGoal] = useState<number>(0);
+    const [goal, setGoal] = useState<number>(2);
+    const [goalTimeType, setGoalTimeType] = useState<string | null>('minute');
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
 
     /** REF */
     let timerInterval = useRef<any>(null);
 
+    /** VARIABLES */
+    const totalSecondsToComplete: number = getTotalSeconds(goalTimeType, goal);
+    const timeProgress = totalSecondsElapsed > 0 && totalSecondsToComplete > 0 ? Math.round((totalSecondsElapsed / totalSecondsToComplete) * 100) : 0;
+    const timeRemaining = 100 - timeProgress;
+
+    /** REACT HOOKS */
+    useEffect(() => {
+        if(startDate !== null && totalSecondsElapsed > 0) {
+            if(totalSecondsElapsed === totalSecondsToComplete) {
+                clearInterval(timerInterval.current);
+                const eDate = new Date();
+                setEndDate(eDate);
+                setStartFasting(false);
+
+                Alert.alert(
+                    'Awesome!',
+                    'You have completed your fasting goal! Keep it up.',
+                    [
+                        {text: "Got it", onPress: async () => {
+                            await updateFastingData(eDate);
+                        }, style: 'cancel'},
+                    ]
+                );
+            }
+            
+        }
+    }, [startDate, totalSecondsElapsed])
+
+    /** FUNCTIONS */
+    const restart = () => {
+        return new Promise((resolve: Function) => {
+            setStartFasting(false);
+            setSeconds(0);
+            setTotalSecondsElapsed(0);
+            setMinutes(0);
+            setHours(0);
+            setDays(0);
+            setStartDate(null);
+            setEndDate(null);
+
+            setTimeout(() => {
+                resolve(true);
+            }, 200)
+        })
+    }
+
     const _onNavigateToHistory = () => {
         navigation.navigate("FastingTrackerHistory");
     }
 
     const createFastingData = async (sDate: Date) => {
+        const newSDate = new Date(sDate);
         const optimisticData = {
             id: Math.floor(Math.random() * 99999),
             start_time: sDate,
@@ -39,8 +89,8 @@ export const useFastingTrackerHooks = () => {
             updated_at: null,
             goal: {
                 time_value: goal,
-                time_type: 'hour',
-                time_int: sDate.setHours(new Date().getHours() + goal)
+                time_type: goalTimeType,
+                time_int: newSDate.setMinutes(new Date().getMinutes() + goal)
             }
         }
 
@@ -73,10 +123,29 @@ export const useFastingTrackerHooks = () => {
     }
 
     const _onStartFasting = async () => {
-        setStartFasting(!startFasting);
+        if(goal === 0) {
+            Alert.alert(
+                'Wait!',
+                'You should set a goal first before you start your fasting.',
+                [
+                    {text: "Cancel", onPress: () => {}, style: 'cancel'},
+                    {text: 'Okay', onPress: _onSetGoal}
+                ]
+            );
+
+            return;
+        }
 
         if(startFasting === false) {
+            await restart();
+            setStartFasting(true);
+
             timerInterval.current = setInterval(() => {
+                setTotalSecondsElapsed((prevSec) => {
+                    const currSec = prevSec += 1;
+                    return currSec;
+                });
+
                 setSeconds((prevSec: number) => {
                     const currSec = prevSec += 1;
 
@@ -116,20 +185,9 @@ export const useFastingTrackerHooks = () => {
 
             const sDate = new Date();
             setStartDate(sDate);
-
-            if(goal === null) {
-                Alert.alert(
-                    'Wait!',
-                    'You should set a goal first before you start your fasting.',
-                    [
-                        {text: "Cancel", onPress: () => {}, style: 'cancel'},
-                        {text: 'Okay', onPress: _onSetGoal}
-                    ]
-                )
-            } else {
-                await createFastingData(sDate);
-            }
+            await createFastingData(sDate);
         } else {
+            setStartFasting(false);
             clearInterval(timerInterval.current);
 
             const eDate = new Date();
@@ -148,5 +206,10 @@ export const useFastingTrackerHooks = () => {
         _onNavigateToHistory,
         startDate,
         endDate,
+        goal,
+        goalTimeType,
+        totalSecondsElapsed,
+        timeProgress,
+        timeRemaining
     }
 }

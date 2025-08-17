@@ -6,7 +6,7 @@ import PieChart from 'react-native-pie-chart/v3api'
 import {Colors} from "@/config/theme";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useFastingTrackerHooks} from "./hooks";
-import {dayTimeFormat} from "@/helpers/DayTimeFormat";
+import {dayTimeFormat, timePluralSingular} from "@/helpers/DayTimeFormat";
 
 const FastingTracker = ({navigation}: any) => {
     const Styles = useStyles();
@@ -20,6 +20,9 @@ const FastingTracker = ({navigation}: any) => {
         _onNavigateToHistory,
         startDate,
         endDate,
+        goal, goalTimeType,
+        timeProgress,
+        timeRemaining
     } = useFastingTrackerHooks();
 
     return (
@@ -30,21 +33,21 @@ const FastingTracker = ({navigation}: any) => {
                     <View style={Styles.counterContainer}>
                         <View style={Styles.counterWrapper}>
                             <PieChart 
-                            widthAndHeight={Styles.counterContainer.width * 0.85} 
-                            series={[70, 30]} 
-                            sliceColor={[Colors.tab_active_color, Colors.border_color]}
-                            coverRadius={0.7} />
+                                widthAndHeight={Styles.counterContainer.width * 0.85} 
+                                series={[timeProgress, timeRemaining]} 
+                                sliceColor={[Colors.tab_active_color, Colors.border_color]}
+                                coverRadius={0.7} />
 
                             {days < 1 ? (<Text style={Styles.timerLabel}>
-                                <Text style={Styles.timeElapsedLabel}>{`elapsed time (80%)`}</Text>{'\n'}
+                                <Text style={Styles.timeElapsedLabel}>{`elapsed time (${timeProgress}%)`}</Text>{'\n'}
                                 {hours < 10 ? `0${hours}` : hours} : {minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}
-                                {'\n'}<Text style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: 16 HOURS`}</Text>
+                                {'\n'}<Text style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}`}</Text>
                             </Text>) : (
                                 <Text style={Styles.timerLabel}>
                                     <Text style={Styles.timeElapsedLabel}>{`elapsed time (80%)`}</Text>{'\n'}
                                     {days < 10 ? `0${days}` : days} : {hours < 10 ? `0${hours}` : hours} : {minutes < 10 ? `0${minutes}` : minutes}
                                     <Text style={Styles.secondsSmall}>{' '}{seconds < 10 ? `0${seconds}` : seconds}</Text>
-                                    {'\n'}<Text style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: 16 HOURS`}</Text>
+                                    {'\n'}<Text style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}`}</Text>
                                 </Text>
                             )}
                         </View>
