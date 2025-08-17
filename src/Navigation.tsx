@@ -13,6 +13,9 @@ import ContactUsScreen from "@/screens/ContactUs";
 import TermsOfUseScreen from "@/screens/TermsOfUse";
 import PrivacyPolicyScreen from "@/screens/PrivacyPolicy";
 
+/** SUB SCREEN */
+import FastingTrackerHistoryScreen from "@/screens/FastingTracker/FastingHistory";
+
 const RootStack = createNativeStackNavigator({
     initialRouteName: "Login",
     screens: {
@@ -32,6 +35,12 @@ const RootStack = createNativeStackNavigator({
             screen: FastingTrackerScreen,
             options: {
                 headerTitle: "Fasting Tracker"
+            }
+        },
+        FastingTrackerHistory: {
+            screen: FastingTrackerHistoryScreen,
+            options: {
+                headerTitle: "Fasting History"
             }
         },
         StepsTracker: {

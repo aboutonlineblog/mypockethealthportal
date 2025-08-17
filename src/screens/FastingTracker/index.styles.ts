@@ -76,6 +76,8 @@ export const useStyles = () => {
         },
         timeStampLabel: {
             textAlign: 'center',
+            fontSize: 12,
+            fontWeight: 'bold'
         },
         timeLabel: {
             fontSize: 18,

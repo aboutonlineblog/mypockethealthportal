@@ -6,8 +6,9 @@ import PieChart from 'react-native-pie-chart/v3api'
 import {Colors} from "@/config/theme";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useFastingTrackerHooks} from "./hooks";
+import {dayTimeFormat} from "@/helpers/DayTimeFormat";
 
-const FastingTracker = () => {
+const FastingTracker = ({navigation}: any) => {
     const Styles = useStyles();
     const {
         _onStartFasting, 
@@ -15,7 +16,10 @@ const FastingTracker = () => {
         seconds,
         minutes,
         hours,
-        days
+        days,
+        _onNavigateToHistory,
+        startDate,
+        endDate,
     } = useFastingTrackerHooks();
 
     return (
@@ -51,20 +55,20 @@ const FastingTracker = () => {
 
                         <View style={Styles.timeStampContainer}>
                             <View style={Styles.timeStapContainerSections}>
-                                <Text style={Styles.timeStampLabel}>Fasting Started</Text>
-                                <Text style={[Styles.timeStampLabel, Styles.timeLabel]}>Today, 6:00 am</Text>
+                                <Text style={Styles.timeStampLabel}>FASTING STARTED</Text>
+                                <Text style={[Styles.timeStampLabel, Styles.timeLabel]}>{startDate ? `${dayTimeFormat(startDate)}` : '----'}</Text>
                             </View>
                             <View style={[Styles.timeStapContainerSections, Styles.centerSpace]}></View>
                             <View style={Styles.timeStapContainerSections}>
-                                <Text style={Styles.timeStampLabel}>Fasting Goal</Text>
-                                <Text style={[Styles.timeStampLabel, Styles.timeLabel]}>Friday, 9:00 pm</Text>
+                                <Text style={Styles.timeStampLabel}>FASTING GOAL</Text>
+                                <Text style={[Styles.timeStampLabel, Styles.timeLabel]}>{endDate ? `${dayTimeFormat(endDate)}` : '----'}</Text>
                             </View>
                         </View>
 
                         <View style={Styles.actionBtnsContainer}>
                             <View style={Styles.bgDecor} />
                             <View style={Styles.actionBtns}>
-                                <TouchableOpacity style={Styles.actBtn} activeOpacity={1}>
+                                <TouchableOpacity style={Styles.actBtn} activeOpacity={1} onPress={_onNavigateToHistory}>
                                     <Icon name="newspaper-sharp" size={Styles.actBtn.width * 0.5} color={Colors.tab_active_color} />
                                 </TouchableOpacity>
                             </View>
