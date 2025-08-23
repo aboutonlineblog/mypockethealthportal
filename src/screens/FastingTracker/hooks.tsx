@@ -115,7 +115,7 @@ export const useFastingTrackerHooks = () => {
     }
 
     const updateFastingData = async (eDate: Date) => {
-
+        queryClient.invalidateQueries({queryKey: [`FASTING_HISTORY`]})
     }
 
     const _onSetGoal = () => {

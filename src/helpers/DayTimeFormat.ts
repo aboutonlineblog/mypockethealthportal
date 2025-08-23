@@ -1,4 +1,16 @@
 export const Days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+export const Months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+export const getAmPm = (hour: number) => {
+    let ampm;
+    if (hour >= 12) {
+        ampm = 'pm';
+    } else {
+        ampm = 'am';
+    }
+
+    return ampm;
+}
 
 export const dayTimeFormat = (date: Date) => {
     const dayToday = Days[new Date().getDay()];

@@ -3,12 +3,13 @@ import {View, FlatList} from "react-native";
 import {useStyles} from "./index.styles";
 import {useFastingTrackerHooks} from "./hooks";
 import FastingTrackerItem from "./FastingTrackerItem";
+import {FastingTrackerHistoryRenderItemProps} from "./interafaces";
 
 const FastingTrackerHistory = () => {
     const Styles = useStyles();
     const {fastingHistory} = useFastingTrackerHooks();
 
-    const RenderItem = useCallback(({item}: any) => {
+    const RenderItem = useCallback(({item}: FastingTrackerHistoryRenderItemProps) => {
         return (
             <FastingTrackerItem {...item} />
         );
