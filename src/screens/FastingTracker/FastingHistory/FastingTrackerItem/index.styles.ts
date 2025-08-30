@@ -10,15 +10,21 @@ export const useStyles = () => {
         container: {
             width,
             height: ITEM_HEIGHT,
-            // borderBottomWidth: 1,
-            // borderBottomColor: Colors.border_color,
-            flexDirection: 'row'
+            flexDirection: 'row',
+        },
+        skeletonContainer: {
+            width,
+            height: ITEM_HEIGHT,
+            marginTop: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        skeletnWrapper: {
+            width: width * 0.9,
         },
         trackerContainer: {
             width: width * 0.3,
             height: ITEM_HEIGHT,
-            // borderRightWidth: 1,
-            // borderRightColor: Colors.border_color,
             justifyContent: 'center',
             alignItems: 'flex-end'
         },
@@ -76,7 +82,8 @@ export const useStyles = () => {
         },
         rangeLabel: {
             fontWeight: 'bold',
-            fontSize: 24
+            fontSize: 20,
+            textAlign: 'center'
         },
         rangeLabelUnit: {
             fontSize: 12

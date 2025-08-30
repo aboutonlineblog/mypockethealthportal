@@ -43,6 +43,14 @@ export const useGlobalStyles = () => {
         },
         mLeftSpace20: {
             marginLeft: 20
+        },
+
+        /** CONTAINERS */
+        emptyDataContainer: {
+            width,
+            height: height * 0.84,
+            justifyContent: 'center',
+            alignItems: 'center',
         }
     })
 }

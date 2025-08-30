@@ -2,6 +2,7 @@ import {useInfiniteQuery} from "@tanstack/react-query";
 import _ from "underscore";
 import {useQueryClient} from "@tanstack/react-query";
 import {getFastingHistory} from "@/api/fasting";
+import {FastingTrackerHistoryRenderItem} from "./interafaces";
 
 export const useFastingTrackerHooks = () => {
     const queryClient = useQueryClient();
@@ -22,7 +23,15 @@ export const useFastingTrackerHooks = () => {
         },
     });
     
-    const fastingHistory = data ? _.flatten(data.pages) : [];
+    const fastingHistory: Array<any> = data && data?.pages ? _.flatten(data?.pages) : [];
+
+    const _onLoadMore = (numOfItems: number, limit: number, loadmore: Function,) => {
+        if (numOfItems >= limit) {
+            loadmore();
+        }
+    }
+
+    const loadingItems = [{id: '1'}, {id: '2'}, {id: '3'}];
 
     return {
         fastingHistory,
@@ -31,6 +40,8 @@ export const useFastingTrackerHooks = () => {
         isRefetching,
         fetchNextPage,
         refetch,
-        isFetchingNextPage
+        isFetchingNextPage,
+        _onLoadMore,
+        loadingItems
     }
 }

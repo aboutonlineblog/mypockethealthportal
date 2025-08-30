@@ -1,15 +1,27 @@
 import React, {useState, useRef, useEffect, useMemo} from "react";
 import {Alert} from "react-native";
 import _ from "underscore";
-import {useQueryClient} from "@tanstack/react-query";
+import {useQueryClient, useInfiniteQuery} from "@tanstack/react-query";
 import {useNavigation, NavigationProp} from '@react-navigation/native';
 import {FastingTrackerSubNavi} from "./interafaces";
 import {getTotalSeconds} from "@/helpers/DayTimeFormat";
+import {getFastingHistory} from "@/api/fasting";
 
 export const useFastingTrackerHooks = () => {
     /** HOOKS */
     const navigation = useNavigation<NavigationProp<FastingTrackerSubNavi>>();
     const queryClient = useQueryClient();
+
+    /** PRE-LOADS */
+    /** PRE-LOAD FASTING HISTORY FOR STOP AND START FASTING MUTATION */
+    useInfiniteQuery({
+        queryKey: ['FASTING_HISTORY', {queryClient}], 
+        queryFn: getFastingHistory, 
+        initialPageParam: 1, 
+        getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+            return lastPageParam + 1;
+        }
+    });
 
     /** STATES */
     const [startFasting, setStartFasting] = useState<boolean>(false);
@@ -25,6 +37,7 @@ export const useFastingTrackerHooks = () => {
 
     /** REF */
     let timerInterval = useRef<any>(null);
+    let trackingId = useRef<number | null>(null);
 
     /** VARIABLES */
     const totalSecondsToComplete: number = getTotalSeconds(goalTimeType, goal);
@@ -78,12 +91,13 @@ export const useFastingTrackerHooks = () => {
 
     const createFastingData = async (sDate: Date) => {
         const newSDate = new Date(sDate);
+        const startedTrackingId = Math.floor(Math.random() * 99999);
+        trackingId.current = startedTrackingId;
         const optimisticData = {
-            id: Math.floor(Math.random() * 99999),
+            id: startedTrackingId,
             start_time: sDate,
             end_time: null,
             fasting_range: 0,
-            fasting_range_time_unit: 'sec',
             status: 'started',
             created_at: sDate,
             updated_at: null,
@@ -94,7 +108,8 @@ export const useFastingTrackerHooks = () => {
             }
         }
 
-        queryClient.setQueryData(['FASTING_HISTORY'], (oldData: any) => {
+        queryClient.setQueryData([`FASTING_HISTORY_ITEM_${startedTrackingId}`, {id: startedTrackingId}], optimisticData)
+        queryClient.setQueryData(['FASTING_HISTORY', {queryClient}], (oldData: any) => {
             if (!oldData) {
                 return {
                     pages: [[optimisticData]],
@@ -115,7 +130,15 @@ export const useFastingTrackerHooks = () => {
     }
 
     const updateFastingData = async (eDate: Date) => {
-        queryClient.invalidateQueries({queryKey: [`FASTING_HISTORY`]})
+        queryClient.setQueryData([`FASTING_HISTORY_ITEM_${trackingId.current}`, {id: trackingId.current}], (oldData: any) => {
+            return {
+                ...oldData,
+                end_time: eDate,
+                updated_at: eDate,
+                status: 'ended',
+                fasting_range: totalSecondsElapsed,
+            };
+        });
     }
 
     const _onSetGoal = () => {

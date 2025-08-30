@@ -17,3 +17,11 @@ export interface FastingTrackerHistoryRenderItem {
 export interface FastingTrackerHistoryRenderItemProps {
     item: FastingTrackerHistoryRenderItem
 };
+
+export interface FastingTrackerItemProps {
+    id: string | number;
+}
+
+export interface LoadingItemProps {
+    id: string | number;
+}

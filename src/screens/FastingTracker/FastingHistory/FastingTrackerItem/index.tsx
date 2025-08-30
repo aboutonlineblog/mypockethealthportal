@@ -1,11 +1,14 @@
 import React from "react";
 import {View, Text} from "react-native";
 import {useStyles} from "./index.styles";
-import {FastingTrackerHistoryRenderItem} from '../interafaces';
+import {FastingTrackerItemProps, FastingTrackerHistoryRenderItem} from '../interafaces';
 import {getAmPm, Months} from "@/helpers/DayTimeFormat";
+import {useFastingTrackerItem, useRenderTrackerHistoryItem} from "./hooks";
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
-const FastingTrackerItem = ({start_time, end_time}: FastingTrackerHistoryRenderItem) => {
+const RenderTrackerHistoryItem = ({start_time, end_time, fasting_range}: FastingTrackerHistoryRenderItem) => {
     const Styles = useStyles();
+    const {getHoursMinutes} = useRenderTrackerHistoryItem();
 
     const START_NEW_DATE = new Date(start_time);
     const START_DATE = `${Months[START_NEW_DATE.getMonth()]} ${START_NEW_DATE.getDay()}, ${START_NEW_DATE.getFullYear()}`;
@@ -22,7 +25,28 @@ const FastingTrackerItem = ({start_time, end_time}: FastingTrackerHistoryRenderI
             <View style={Styles.trackerContainer}>
                 <View style={Styles.boxConnector}>
                     <View style={Styles.fastingRangeContainer}>
-                        <Text style={Styles.rangeLabel}>5 <Text style={Styles.rangeLabelUnit}>hrs</Text></Text>
+                        {
+                            getHoursMinutes(fasting_range).hours > 0 ? (
+                                <Text style={Styles.rangeLabel}>
+                                    {getHoursMinutes(fasting_range).hours} 
+                                    <Text style={Styles.rangeLabelUnit}> hrs{'\n'} 
+                                        {getHoursMinutes(fasting_range).minutes} min
+                                    </Text>
+                                </Text>
+                            ) : getHoursMinutes(fasting_range).minutes > 0 ? (
+                                <Text style={Styles.rangeLabel}>
+                                    {getHoursMinutes(fasting_range).minutes} 
+                                    <Text style={Styles.rangeLabelUnit}>min{'\n'} 
+                                        {getHoursMinutes(fasting_range).seconds} sec
+                                    </Text>
+                                </Text>
+                            ) : (
+                                <Text style={Styles.rangeLabel}>
+                                    {getHoursMinutes(fasting_range).seconds} 
+                                    <Text style={Styles.rangeLabelUnit}> sec</Text>
+                                </Text>
+                            )
+                        }
                     </View>
                 </View>
             </View>
@@ -49,6 +73,27 @@ const FastingTrackerItem = ({start_time, end_time}: FastingTrackerHistoryRenderI
                         <Text style={Styles.dayDateStamp}>{END_DATE}</Text>
                     </View>
                 </View>
+            </View>
+        </View>
+    )
+}
+
+const FastingTrackerItem = ({id}: FastingTrackerItemProps) => {
+    const Styles = useStyles();
+    const {fastingInfo, isLoading} = useFastingTrackerItem(id);
+
+    if(fastingInfo !== undefined && fastingInfo !== null && Object.keys(fastingInfo).length > 0 && isLoading === false) {
+        return (
+            <RenderTrackerHistoryItem {...fastingInfo} />
+        )
+    };
+
+    return (
+        <View style={Styles.skeletonContainer}>
+            <View style={Styles.skeletnWrapper}>
+                <SkeletonPlaceholder borderRadius={8}>
+                    <SkeletonPlaceholder.Item width={Styles.skeletnWrapper.width} height={Styles.skeletonContainer.height}></SkeletonPlaceholder.Item>
+                </SkeletonPlaceholder>
             </View>
         </View>
     )
