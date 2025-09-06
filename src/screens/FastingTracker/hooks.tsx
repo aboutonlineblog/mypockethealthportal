@@ -31,7 +31,8 @@ export const useFastingTrackerHooks = () => {
     const [hours, setHours] = useState<number>(0);
     const [days, setDays] = useState<number>(0);
     const [goal, setGoal] = useState<number>(2);
-    const [goalTimeType, setGoalTimeType] = useState<string | null>('minute');
+    const [showGoalEditor, setShowGoalEditor] = useState<boolean>(false);
+    const [goalTimeType, setGoalTimeType] = useState<null | 'day' | 'hour' | 'minute'>('minute');
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -219,6 +220,14 @@ export const useFastingTrackerHooks = () => {
         }
     }
 
+    const _onEditGoal = () => {
+        setShowGoalEditor(true);
+    }
+
+    const _onCloseEditGoal = () => {
+        setShowGoalEditor(false);
+    }
+
     return {
         startFasting,
         _onStartFasting,
@@ -233,6 +242,11 @@ export const useFastingTrackerHooks = () => {
         goalTimeType,
         totalSecondsElapsed,
         timeProgress,
-        timeRemaining
+        timeRemaining,
+        _onEditGoal,
+        _onCloseEditGoal,
+        showGoalEditor,
+        setGoalTimeType,
+        setGoal
     }
 }

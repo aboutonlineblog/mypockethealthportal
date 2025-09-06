@@ -10,18 +10,18 @@ export default [
         background: FastingImage,
         route: 'FastingTracker'
     },
-    {
-        id: 2,
-        name: "Steps Tracker",
-        description: "",
-        background: WalkingImage,
-        route: 'StepsTracker'
-    },
-    {
-        id: 3,
-        name: "Meal Planner",
-        description: "",
-        background: MealPlanImage,
-        route: 'MealPlanner'
-    }
+    // {
+    //     id: 2,
+    //     name: "Steps Tracker",
+    //     description: "",
+    //     background: WalkingImage,
+    //     route: 'StepsTracker'
+    // },
+    // {
+    //     id: 3,
+    //     name: "Meal Planner",
+    //     description: "",
+    //     background: MealPlanImage,
+    //     route: 'MealPlanner'
+    // }
 ]

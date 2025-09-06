@@ -59,8 +59,8 @@ const Dashboard = () => {
     return (
         <Tab.Navigator>
             <Tab.Screen name="Apps" component={AppsTab} options={tabOptions('apps')} />
-            <Tab.Screen name="Stats" component={StatsTab} options={tabOptions('stats')} />
-            <Tab.Screen name="Diary" component={DiaryTab} options={tabOptions('diary')} />
+            {/* <Tab.Screen name="Stats" component={StatsTab} options={tabOptions('stats')} />
+            <Tab.Screen name="Diary" component={DiaryTab} options={tabOptions('diary')} /> */}
             <Tab.Screen name="Settings" component={SettingsTab} options={tabOptions('settings')} />
         </Tab.Navigator>
     )

@@ -16,6 +16,19 @@ import PrivacyPolicyScreen from "@/screens/PrivacyPolicy";
 /** SUB SCREEN */
 import FastingTrackerHistoryScreen from "@/screens/FastingTracker/FastingHistory";
 
+/** CONFIG */
+import {Colors} from "@/config/theme";
+
+const ScreenOptions = (title: string) => {
+    return {
+        headerTitle: title,
+        headerShadowVisible: false,
+        headerStyle: {
+            backgroundColor: Colors.screen_background
+        },
+    }
+}
+
 const RootStack = createNativeStackNavigator({
     initialRouteName: "Login",
     screens: {
@@ -27,57 +40,39 @@ const RootStack = createNativeStackNavigator({
         },
         Dashboard: {
             screen: DashboardScreen,
-            options: {
-                headerTitle: "Health Portal"
-            }
+            options: ScreenOptions("Health Portal"),
         },
         FastingTracker: {
             screen: FastingTrackerScreen,
-            options: {
-                headerTitle: "Fasting Tracker"
-            }
+            options: ScreenOptions("Fasting Tracker"),
         },
         FastingTrackerHistory: {
             screen: FastingTrackerHistoryScreen,
-            options: {
-                headerTitle: "Fasting History"
-            }
+            options: ScreenOptions("Fasting History"),
         },
         StepsTracker: {
             screen: StepsTrackerScreen,
-            options: {
-                headerTitle: "Steps Tracker"
-            }
+            options: ScreenOptions("Steps Tracker"),
         },
         MealPlanner: {
             screen: MealPlannerScreen,
-            options: {
-                headerTitle: "Meal Planner"
-            }
+            options: ScreenOptions("Meal Planner"),
         },
         AccountProfile: {
             screen: AccountProfileScreen,
-            options: {
-                headerTitle: "Account Profile"
-            }
+            options: ScreenOptions("Account Profile"),
         },
         ContactUs: {
             screen: ContactUsScreen,
-            options: {
-                headerTitle: "Contact Us"
-            }
+            options: ScreenOptions("Contact Us"),
         },
         TermsOfUse: {
             screen: TermsOfUseScreen,
-            options: {
-                headerTitle: "Terms Of Use"
-            }
+            options: ScreenOptions("Terms Of Use"),
         },
         PrivacyPolicy: {
             screen: PrivacyPolicyScreen,
-            options: {
-                headerTitle: "Privacy Policy"
-            }
+            options: ScreenOptions("Privacy Policy"),
         },
     },
 });

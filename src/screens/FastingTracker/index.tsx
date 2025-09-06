@@ -5,8 +5,11 @@ import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import PieChart from 'react-native-pie-chart/v3api'
 import {Colors} from "@/config/theme";
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/AntDesign';
 import {useFastingTrackerHooks} from "./hooks";
 import {dayTimeFormat, timePluralSingular} from "@/helpers/DayTimeFormat";
+import AppModal from "@/modules/AppModal";
+import FastingGoalEditor from "./FastingGoalEditor";
 
 const FastingTracker = ({navigation}: any) => {
     const Styles = useStyles();
@@ -22,7 +25,9 @@ const FastingTracker = ({navigation}: any) => {
         endDate,
         goal, goalTimeType,
         timeProgress,
-        timeRemaining
+        timeRemaining, _onEditGoal,
+        _onCloseEditGoal, showGoalEditor,
+        setGoalTimeType, setGoal
     } = useFastingTrackerHooks();
 
     return (
@@ -41,13 +46,17 @@ const FastingTracker = ({navigation}: any) => {
                             {days < 1 ? (<Text style={Styles.timerLabel}>
                                 <Text style={Styles.timeElapsedLabel}>{`elapsed time (${timeProgress}%)`}</Text>{'\n'}
                                 {hours < 10 ? `0${hours}` : hours} : {minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}
-                                {'\n'}<Text style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}`}</Text>
+                                {'\n'}<Text onPress={_onEditGoal} style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}\t`}
+                                    <Icon2 name="edit" size={16} color={Colors.tab_active_color} />
+                                </Text>
                             </Text>) : (
                                 <Text style={Styles.timerLabel}>
                                     <Text style={Styles.timeElapsedLabel}>{`elapsed time (80%)`}</Text>{'\n'}
                                     {days < 10 ? `0${days}` : days} : {hours < 10 ? `0${hours}` : hours} : {minutes < 10 ? `0${minutes}` : minutes}
                                     <Text style={Styles.secondsSmall}>{' '}{seconds < 10 ? `0${seconds}` : seconds}</Text>
-                                    {'\n'}<Text style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}`}</Text>
+                                    {'\n'}<Text onPress={_onEditGoal} style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}`}
+                                        <Icon2 name="edit" size={16} color={Colors.tab_active_color} />
+                                    </Text>
                                 </Text>
                             )}
                         </View>
@@ -88,6 +97,10 @@ const FastingTracker = ({navigation}: any) => {
                         </View>
                     </View>
                     <View style={[Styles.actionsContainer, Styles.flexCenterTop]}></View>
+
+                    <AppModal show={showGoalEditor} onClose={_onCloseEditGoal}>
+                        <FastingGoalEditor {...{setGoalTimeType, setGoal, onClose: _onCloseEditGoal}} />
+                    </AppModal>
                 </View>
             </SafeAreaView>
         </SafeAreaProvider>

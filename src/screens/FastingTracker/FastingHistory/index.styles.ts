@@ -8,7 +8,7 @@ export const useStyles = () => {
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: Colors.app_bg_color
+            backgroundColor: Colors.screen_background
         },
         listStyle: {paddingTop: 10},
         footerLoader: {

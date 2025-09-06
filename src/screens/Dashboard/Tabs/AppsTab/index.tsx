@@ -22,7 +22,7 @@ const AppsTab = () => {
     }, [])
 
     return (
-        <View>
+        <View style={Styles.container}>
             <FlatList
                 data={AppList}
                 renderItem={RenderItem}

@@ -8,7 +8,7 @@ export const useStyles = () => {
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: Colors.app_bg_color
+            backgroundColor: Colors.screen_background
         },
         listStyle: {paddingTop: 10},
         actionsContainer: {
@@ -87,6 +87,7 @@ export const useStyles = () => {
         goalLabel: {
             fontWeight: 'bold',
             fontSize: 14,
+            lineHeight: 60,
         },
         actionBtnsContainer: {
             height: (height * 0.07) * 1.1,
