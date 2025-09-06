@@ -68,7 +68,9 @@ const FastingTrackerHistory = () => {
                         return (
                             <View style={GlobalStyles.emptyDataContainer}>
                                 <Text style={Styles.emptyMessageLabel}>No data available.</Text>
-                                <Button label="Retry" width={GlobalStyles.emptyDataContainer.width * 0.4} onPress={() => refetch()} />
+                                <Button label="Retry" buttonStyle={{
+                                    width: GlobalStyles.emptyDataContainer.width * 0.4
+                                }} onPress={() => refetch()} />
                             </View>
                         )
                     }
