@@ -79,6 +79,12 @@ export const useStyles = () => {
         formLabel: {
             fontWeight: 'bold',
             marginLeft: 17
+        },
+        backToLoginLink: {
+            marginVertical: 15,
+            fontWeight: 'bold',
+            color: Colors.button_color_normal,
+            padding: 5
         }
     })
 }

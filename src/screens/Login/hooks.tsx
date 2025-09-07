@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {Alert} from "react-native";
-import {useNavigation, CommonActions} from '@react-navigation/native';
+import {useNavigation, CommonActions, NavigationProp} from '@react-navigation/native';
 import {useMutation, UseMutationResult} from "@tanstack/react-query";
 import {loginApi} from "@/api/login";
-import {LoginProps} from "./interafaces";
+import {LoginProps, LoginNavigationProps} from "./interafaces";
 
 type LoginParams = {
     e: string;
@@ -12,7 +12,7 @@ type LoginParams = {
 
 export const useLoginHooks = () => {
     /** HOOKS */
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<LoginNavigationProps>>();
 
     /** STATES */
     const [email, setEmail] = useState<string>("");
@@ -76,5 +76,9 @@ export const useLoginHooks = () => {
         }
     }
 
-    return {_onLogin, _onGoogleLogin, email, password, _onChangeInputValue}
+    const _onGoToCreateAccount = () => {
+        navigation.navigate("CreateAccount");
+    }
+
+    return {_onLogin, _onGoogleLogin, email, password, _onChangeInputValue, _onGoToCreateAccount}
 }

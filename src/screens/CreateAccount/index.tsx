@@ -12,16 +12,14 @@ import {useStyles} from "./index.styles";
 import {useGlobalStyles} from "@/config/globalStyles.styles";
 import {APP_TITLE, USE_APP_LOGO} from "@/config/app";
 import Button from "@/modules/Button";
-import {useLoginHooks} from "./hooks";
-import LoginBG from "./assets/bg.jpg";
-import GoogleIcon from "./assets/google_logo.png";
-import PackageJSON from "../../../package.json";
-import AppLogo from "./assets/app_logo.png";
+import LoginBG from "@/screens/Login/assets/bg.jpg";
+import AppLogo from "@/screens/Login/assets/app_logo.png";
+import {useCreateAccount} from "./hooks";
 
-const Login = () => {
+const CreateAccount = () => {
     const Styles = useStyles();
     const GlobalStyles = useGlobalStyles();
-    const {_onGoogleLogin, _onLogin, _onChangeInputValue, _onGoToCreateAccount} = useLoginHooks();
+    const {_onCreateAccount, _onBackToLogin, _onChangeInputValue} = useCreateAccount();
 
     return (
         <ImageBackground source={LoginBG} style={Styles.container}>
@@ -37,6 +35,18 @@ const Login = () => {
                         )}
 
                         <View style={GlobalStyles.inputWrapper}>
+                            <Text style={Styles.formLabel}>Your name</Text>
+                            <TextInput 
+                                autoCapitalize="none"
+                                autoComplete="off"
+                                autoCorrect={false}
+                                style={[GlobalStyles.input, Styles.input]} 
+                                placeholder="Enter name" 
+                                placeholderTextColor="#b5b5b5"
+                                onChangeText={(val: string) => _onChangeInputValue(val, 'name')} 
+                            />
+                        </View>
+                        <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Email</Text>
                             <TextInput 
                                 autoCapitalize="none"
@@ -46,7 +56,8 @@ const Login = () => {
                                 style={[GlobalStyles.input, Styles.input]} 
                                 placeholder="Enter email address" 
                                 placeholderTextColor="#b5b5b5"
-                                onChangeText={(val: string) => _onChangeInputValue(val, 'email')} />
+                                onChangeText={(val: string) => _onChangeInputValue(val, 'email')} 
+                            />
                         </View>
                         <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Password</Text>
@@ -55,27 +66,18 @@ const Login = () => {
                                 placeholder="Enter password" 
                                 placeholderTextColor="#b5b5b5"
                                 secureTextEntry={true}
-                                onChangeText={(val: string) => _onChangeInputValue(val, 'password')} />
+                                onChangeText={(val: string) => _onChangeInputValue(val, 'password')} 
+                            />
                         </View>
-                        <Button label="Login" onPress={_onLogin} />
-                        <Button label="Create Account" onPress={_onGoToCreateAccount} />
-                        <Text>or</Text>
-                        <Button 
-                            icon={GoogleIcon} 
-                            label="Sign in with Google" 
-                            buttonStyle={Styles.googleSignInButton} 
-                            onPress={_onGoogleLogin}
-                            buttonLabelStyle={Styles.googleSignInButtonLabel} />
+                        <Button label="Create Account" onPress={_onCreateAccount} />
+
+                        <Text style={Styles.backToLoginLink} onPress={_onBackToLogin}>Back to Login</Text>
+                        
                     </KeyboardAvoidingView>
                 </View>
             </TouchableWithoutFeedback>
-
-            <View style={Styles.footerContainer}>
-                <Text style={Styles.copyrightText}>© Copyright 2025 Atomic Devz. All rights reserved.</Text>
-                <Text style={Styles.versionText}>v{PackageJSON.version}</Text>
-            </View>
         </ImageBackground>
     )
 }
 
-export default Login;
+export default CreateAccount;

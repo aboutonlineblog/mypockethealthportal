@@ -12,3 +12,7 @@ export interface LoginProps {
     height: number;
     gender: string;
 }
+
+export type LoginNavigationProps = {
+    CreateAccount: {} | undefined;
+};
