@@ -13,6 +13,7 @@ import ContactUsScreen from "@/screens/ContactUs";
 import TermsOfUseScreen from "@/screens/TermsOfUse";
 import PrivacyPolicyScreen from "@/screens/PrivacyPolicy";
 import CreateAccountScreen from "@/screens/CreateAccount";
+import OnBoardingScreen from "@/screens/OnBoarding";
 
 /** SUB SCREEN */
 import FastingTrackerHistoryScreen from "@/screens/FastingTracker/FastingHistory";
@@ -41,6 +42,12 @@ const RootStack = createNativeStackNavigator({
         },
         CreateAccount: {
             screen: CreateAccountScreen,
+            options: {
+                headerShown: false
+            }
+        },
+        OnBoarding: {
+            screen: OnBoardingScreen,
             options: {
                 headerShown: false
             }

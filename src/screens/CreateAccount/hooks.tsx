@@ -17,7 +17,7 @@ export const useCreateAccount = () => {
                 index: 1,
                 routes: [
                     {
-                        name: 'Dashboard',
+                        name: 'OnBoarding',
                         params: {},
                     },
                 ],
