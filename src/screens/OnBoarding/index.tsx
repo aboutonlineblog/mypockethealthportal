@@ -10,6 +10,7 @@ import {
 import {useStyles} from "./index.styles";
 import {useGlobalStyles} from "@/config/globalStyles.styles";
 import LoginBG from "@/screens/Login/assets/bg.jpg";
+import {useOnBoarding} from "./hooks";
 
 /** SUB-SCREENS */
 import BirthdatePicker from "./OnBoardingScreens/Birthdate";
@@ -17,6 +18,7 @@ import BirthdatePicker from "./OnBoardingScreens/Birthdate";
 const OnBoarding = () => {
     const Styles = useStyles();
     const GlobalStyles = useGlobalStyles();
+    const {_onNextPage, currentOnBoardingPage, _onFinishedOnBoarding} = useOnBoarding();
 
     return (
         <ImageBackground source={LoginBG} style={Styles.container}>
@@ -33,7 +35,9 @@ const OnBoarding = () => {
                     </View>
 
                     <View style={Styles.formWrapper}>
-                        <BirthdatePicker />
+                        {currentOnBoardingPage === 1 ? (
+                            <BirthdatePicker onNext={_onNextPage} />
+                        ) : <View onLayout={_onFinishedOnBoarding} />}
                     </View>
                     
                 </View>

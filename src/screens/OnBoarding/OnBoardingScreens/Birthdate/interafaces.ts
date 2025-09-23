@@ -3,3 +3,16 @@ export type PickerProps = {
     value: number;
     name: string;
 }
+
+export interface DatePickerProps {
+    dateString: string;
+    day: number;
+    month: number;
+    timestamp: number;
+    year: number;
+}
+
+export interface OnBoardingProps {
+    onNext?: () => void;
+    onSkip?: () => void;
+}

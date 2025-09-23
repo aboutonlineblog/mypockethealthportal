@@ -46,6 +46,17 @@ export const useStyles = () => {
             borderRadius: 20,
             overflow: 'hidden'
         },
+        calendarContainer: {
+            width: width * 0.8,
+            position: 'absolute',
+            zIndex: 9,
+            height: useGlobalStyles().input.height * 7.25,
+            backgroundColor: Colors.screen_background,
+            top: 65,
+            borderWidth: 1,
+            borderRadius: 20,
+            overflow: 'hidden',
+        },
         pickerItem: {
             width: '100%',
             height: 40,
@@ -98,6 +109,20 @@ export const useStyles = () => {
             alignItems: 'center',
         },
         pickerItemLabel: {
+            fontWeight: 'bold',
+            fontSize: 16
+        },
+        calendarHeader: {
+            height: 40,
+            flexDirection: 'row',
+            width: '100%',
+        },
+        calendarHeaderButton: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        calendarHeaderButtonLabel: {
             fontWeight: 'bold',
             fontSize: 16
         }
