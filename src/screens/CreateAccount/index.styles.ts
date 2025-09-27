@@ -85,6 +85,19 @@ export const useStyles = () => {
             fontWeight: 'bold',
             color: Colors.button_color_normal,
             padding: 5
+        },
+        inputWrapper: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: useGlobalStyles().input.width / 2,
+            borderWidth: 1
+        },
+        showPassBtn: {
+            width: useGlobalStyles().input.height * 0.9,
+            height: useGlobalStyles().input.height * 0.9,
+            justifyContent: 'center',
+            alignItems: 'center',
         }
     })
 }

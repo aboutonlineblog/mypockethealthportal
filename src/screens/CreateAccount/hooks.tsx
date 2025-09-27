@@ -24,6 +24,7 @@ export const useCreateAccount = () => {
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [signUpStatus, setSignupStatus] = useState<string | null>(null);
+    const [securePassword, setSecurePassword] = useState<boolean>(true);
 
     const _onCreateAccount = async () => {
         try {
@@ -137,6 +138,6 @@ export const useCreateAccount = () => {
     return {
         _onCreateAccount, _onBackToLogin, _onChangeInputValue, signUpStatus,
         nameInputRef, emailInputRef, passwordInputRef, confirmPassInputRef,
-        _onNextInput
+        _onNextInput, securePassword, setSecurePassword
     }
 }

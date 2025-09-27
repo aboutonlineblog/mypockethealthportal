@@ -15,6 +15,10 @@ export const useGlobalStyles = () => {
             borderRadius: INPUT_WIDTH / 2,
             borderWidth: 1
         },
+        inputWithIcon: {
+            width: INPUT_WIDTH * 0.81,
+            height: INPUT_HEIGHT,
+        },
         inputWrapper: {
             marginVertical: 5
         },

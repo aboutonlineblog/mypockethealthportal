@@ -6,7 +6,8 @@ import {
     Keyboard, 
     TouchableWithoutFeedback, 
     Platform, TextInput,
-    ImageBackground, Image
+    ImageBackground, Image,
+    TouchableOpacity
 } from "react-native";
 import {useStyles} from "./index.styles";
 import {useGlobalStyles} from "@/config/globalStyles.styles";
@@ -15,6 +16,8 @@ import Button from "@/modules/Button";
 import LoginBG from "@/screens/Login/assets/bg.jpg";
 import AppLogo from "@/screens/Login/assets/app_logo.png";
 import {useCreateAccount} from "./hooks";
+import Icon from "react-native-vector-icons/Feather";
+import {Colors} from "@/config/theme";
 
 const CreateAccount = () => {
     const Styles = useStyles();
@@ -22,7 +25,7 @@ const CreateAccount = () => {
     const {
         _onCreateAccount, _onBackToLogin, _onChangeInputValue, signUpStatus,
         nameInputRef, emailInputRef, passwordInputRef, confirmPassInputRef,
-        _onNextInput
+        _onNextInput, securePassword, setSecurePassword
     } = useCreateAccount();
 
     return (
@@ -71,30 +74,40 @@ const CreateAccount = () => {
                         </View>
                         <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Password</Text>
-                            <TextInput 
-                                ref={passwordInputRef}
-                                style={[GlobalStyles.input, Styles.input]} 
-                                placeholder="Enter password" 
-                                placeholderTextColor="#b5b5b5"
-                                secureTextEntry={true}
-                                autoCapitalize="none"
-                                onChangeText={(val: string) => _onChangeInputValue(val, "password")} 
-                                returnKeyType="next"
-                                onSubmitEditing={() => _onNextInput("confirm_password")}
-                            />
+                            <View style={[Styles.inputWrapper, Styles.input]}>
+                                <TextInput 
+                                    ref={passwordInputRef}
+                                    style={[GlobalStyles.inputWithIcon]} 
+                                    placeholder="Enter password" 
+                                    placeholderTextColor="#b5b5b5"
+                                    secureTextEntry={securePassword}
+                                    autoCapitalize="none"
+                                    onChangeText={(val: string) => _onChangeInputValue(val, "password")} 
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => _onNextInput("confirm_password")}
+                                />
+                                <TouchableOpacity style={Styles.showPassBtn} onPress={() => setSecurePassword(!securePassword)}>
+                                    <Icon name={securePassword === true ? "eye" : "eye-off"} size={Styles.showPassBtn.width * 0.7} color={Colors.black} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Confirm Password</Text>
-                            <TextInput 
-                                ref={confirmPassInputRef}
-                                style={[GlobalStyles.input, Styles.input]} 
-                                placeholder="Confirm password" 
-                                placeholderTextColor="#b5b5b5"
-                                secureTextEntry={true}
-                                autoCapitalize="none"
-                                onChangeText={(val: string) => _onChangeInputValue(val, "confirm_password")} 
-                                onSubmitEditing={_onCreateAccount}
-                            />
+                            <View style={[Styles.inputWrapper, Styles.input]}>
+                                <TextInput 
+                                    ref={confirmPassInputRef}
+                                    style={[GlobalStyles.inputWithIcon]} 
+                                    placeholder="Confirm password" 
+                                    placeholderTextColor="#b5b5b5"
+                                    secureTextEntry={securePassword}
+                                    autoCapitalize="none"
+                                    onChangeText={(val: string) => _onChangeInputValue(val, "confirm_password")} 
+                                    onSubmitEditing={_onCreateAccount}
+                                />
+                                <TouchableOpacity style={Styles.showPassBtn} onPress={() => setSecurePassword(!securePassword)}>
+                                    <Icon name={securePassword === true ? "eye" : "eye-off"} size={Styles.showPassBtn.width * 0.7} color={Colors.black} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
                         <Button label="Create Account" onPress={_onCreateAccount} loading={signUpStatus === "started"} />
