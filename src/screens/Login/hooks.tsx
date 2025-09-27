@@ -3,7 +3,8 @@ import {Alert} from "react-native";
 import {useNavigation, CommonActions, NavigationProp} from '@react-navigation/native';
 import {useMutation, UseMutationResult} from "@tanstack/react-query";
 import {loginApi} from "@/api/login";
-import {LoginProps, LoginNavigationProps} from "./interafaces";
+import {LoginNavigationProps} from "./interafaces";
+import {UsersProps} from "@/mocks/interafaces";
 
 type LoginParams = {
     e: string;
@@ -21,7 +22,7 @@ export const useLoginHooks = () => {
     /** MUTATIONS */
     const loginMutation = useMutation({
         mutationFn: async ({e, p}: LoginParams) => {
-            const user: LoginProps = await loginApi(e, p);
+            const user: UsersProps = await loginApi(e, p);
             return user;
         },
         onSuccess: (data, variables, context) => {

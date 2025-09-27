@@ -4,7 +4,7 @@ import {OnBoardingScreenProps} from "./interafaces";
 
 export const useOnBoarding = () => {
     const navigation = useNavigation<NavigationProp<OnBoardingScreenProps>>();
-    const [currentOnBoardingPage, setCurrentOnBoardingPage] = useState<number>(1);
+    const [currentOnBoardingPage, setCurrentOnBoardingPage] = useState<number>(0);
 
     const _onNextPage = () => {
         setCurrentOnBoardingPage((prevState: number) => prevState + 1)

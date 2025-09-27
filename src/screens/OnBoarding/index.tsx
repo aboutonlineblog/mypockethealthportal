@@ -35,7 +35,7 @@ const OnBoarding = () => {
                     </View>
 
                     <View style={Styles.formWrapper}>
-                        {currentOnBoardingPage === 1 ? (
+                        {currentOnBoardingPage === 0 ? (
                             <BirthdatePicker onNext={_onNextPage} />
                         ) : <View onLayout={_onFinishedOnBoarding} />}
                     </View>

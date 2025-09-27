@@ -1,4 +1,6 @@
-export const users = [
+import {UsersProps} from "./interafaces";
+
+export const users: Array<UsersProps> = [
     {
         id: 0,
         first_name: "neil",

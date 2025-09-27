@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text, TouchableOpacity, ImageSourcePropType, Image, ViewStyle, TextStyle} from "react-native";
+import {View, Text, TouchableOpacity, ImageSourcePropType, Image, ViewStyle, TextStyle, ActivityIndicator} from "react-native";
 import {useGlobalStyles} from "@/config/globalStyles.styles";
 import {useStyles} from "./index.styles";
 
@@ -10,19 +10,28 @@ interface ButtonProps {
     icon?: ImageSourcePropType;
     buttonStyle?: ViewStyle;
     buttonLabelStyle?: TextStyle;
+    loading?: boolean;
 }
 
-const Button = ({label, onPress, width, icon, buttonStyle = {}, buttonLabelStyle = {}}: ButtonProps) => {
+const Button = ({label, onPress, width, icon, buttonStyle = {}, buttonLabelStyle = {}, loading}: ButtonProps) => {
     const GlobalStyle = useGlobalStyles();
     const Styles = useStyles();
     const withIconStyle = icon ? {marginLeft: 10} : {};
     
     return (
-        <TouchableOpacity {...{onPress}} style={[GlobalStyle.button, buttonStyle]} activeOpacity={0.8}>
-            <View style={Styles.container}>
-                {icon && (<Image source={icon} style={Styles.iconContainer} />)}
-                <Text style={[GlobalStyle.buttonLabel, withIconStyle, buttonLabelStyle]}>{label ? label : ''}</Text>
-            </View>
+        <TouchableOpacity disabled={loading} {...{onPress}} style={[GlobalStyle.button, buttonStyle]} activeOpacity={0.8}>
+            {
+                loading !== undefined && loading === true ? (
+                    (
+                        <ActivityIndicator size="small" color={GlobalStyle.buttonLabel.color} />
+                    )
+                ) : (
+                    <View style={Styles.container}>
+                        {icon && (<Image source={icon} style={Styles.iconContainer} />)}
+                        <Text style={[GlobalStyle.buttonLabel, withIconStyle, buttonLabelStyle]}>{label ? label : ''}</Text>
+                    </View>
+                )
+            }
         </TouchableOpacity>
     )
 }

@@ -19,7 +19,11 @@ import {useCreateAccount} from "./hooks";
 const CreateAccount = () => {
     const Styles = useStyles();
     const GlobalStyles = useGlobalStyles();
-    const {_onCreateAccount, _onBackToLogin, _onChangeInputValue} = useCreateAccount();
+    const {
+        _onCreateAccount, _onBackToLogin, _onChangeInputValue, signUpStatus,
+        nameInputRef, emailInputRef, passwordInputRef, confirmPassInputRef,
+        _onNextInput
+    } = useCreateAccount();
 
     return (
         <ImageBackground source={LoginBG} style={Styles.container}>
@@ -37,18 +41,22 @@ const CreateAccount = () => {
                         <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Your name</Text>
                             <TextInput 
+                                ref={nameInputRef}
                                 autoCapitalize="none"
                                 autoComplete="off"
                                 autoCorrect={false}
                                 style={[GlobalStyles.input, Styles.input]} 
                                 placeholder="Enter name" 
                                 placeholderTextColor="#b5b5b5"
-                                onChangeText={(val: string) => _onChangeInputValue(val, 'name')} 
+                                onChangeText={(val: string) => _onChangeInputValue(val, "name")} 
+                                returnKeyType="next"
+                                onSubmitEditing={() => _onNextInput("email")}
                             />
                         </View>
                         <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Email</Text>
                             <TextInput 
+                                ref={emailInputRef}
                                 autoCapitalize="none"
                                 keyboardType="email-address"
                                 autoComplete="off"
@@ -56,20 +64,40 @@ const CreateAccount = () => {
                                 style={[GlobalStyles.input, Styles.input]} 
                                 placeholder="Enter email address" 
                                 placeholderTextColor="#b5b5b5"
-                                onChangeText={(val: string) => _onChangeInputValue(val, 'email')} 
+                                onChangeText={(val: string) => _onChangeInputValue(val, "email")} 
+                                returnKeyType="next"
+                                onSubmitEditing={() => _onNextInput("password")}
                             />
                         </View>
                         <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Password</Text>
                             <TextInput 
+                                ref={passwordInputRef}
                                 style={[GlobalStyles.input, Styles.input]} 
                                 placeholder="Enter password" 
                                 placeholderTextColor="#b5b5b5"
                                 secureTextEntry={true}
-                                onChangeText={(val: string) => _onChangeInputValue(val, 'password')} 
+                                autoCapitalize="none"
+                                onChangeText={(val: string) => _onChangeInputValue(val, "password")} 
+                                returnKeyType="next"
+                                onSubmitEditing={() => _onNextInput("confirm_password")}
                             />
                         </View>
-                        <Button label="Create Account" onPress={_onCreateAccount} />
+                        <View style={GlobalStyles.inputWrapper}>
+                            <Text style={Styles.formLabel}>Confirm Password</Text>
+                            <TextInput 
+                                ref={confirmPassInputRef}
+                                style={[GlobalStyles.input, Styles.input]} 
+                                placeholder="Confirm password" 
+                                placeholderTextColor="#b5b5b5"
+                                secureTextEntry={true}
+                                autoCapitalize="none"
+                                onChangeText={(val: string) => _onChangeInputValue(val, "confirm_password")} 
+                                onSubmitEditing={_onCreateAccount}
+                            />
+                        </View>
+
+                        <Button label="Create Account" onPress={_onCreateAccount} loading={signUpStatus === "started"} />
 
                         <Text style={Styles.backToLoginLink} onPress={_onBackToLogin}>Back to Login</Text>
                         
