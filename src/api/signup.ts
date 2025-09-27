@@ -32,6 +32,4 @@ export const signupApi = async (name: string, email: string, password: string) =
     } else {
         throw new Error("User already exist.")
     }
-
-    return user;
 }
