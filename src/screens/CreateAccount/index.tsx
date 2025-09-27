@@ -23,7 +23,7 @@ const CreateAccount = () => {
     const Styles = useStyles();
     const GlobalStyles = useGlobalStyles();
     const {
-        _onCreateAccount, _onBackToLogin, _onChangeInputValue, signUpStatus,
+        signupMutation, _onBackToLogin, _onChangeInputValue, signUpStatus,
         nameInputRef, emailInputRef, passwordInputRef, confirmPassInputRef,
         _onNextInput, securePassword, setSecurePassword
     } = useCreateAccount();
@@ -102,7 +102,7 @@ const CreateAccount = () => {
                                     secureTextEntry={securePassword}
                                     autoCapitalize="none"
                                     onChangeText={(val: string) => _onChangeInputValue(val, "confirm_password")} 
-                                    onSubmitEditing={_onCreateAccount}
+                                    onSubmitEditing={() => signupMutation.mutate()}
                                 />
                                 <TouchableOpacity style={Styles.showPassBtn} onPress={() => setSecurePassword(!securePassword)}>
                                     <Icon name={securePassword === true ? "eye" : "eye-off"} size={Styles.showPassBtn.width * 0.7} color={Colors.black} />
@@ -110,7 +110,7 @@ const CreateAccount = () => {
                             </View>
                         </View>
 
-                        <Button label="Create Account" onPress={_onCreateAccount} loading={signUpStatus === "started"} />
+                        <Button label="Create Account" onPress={() => signupMutation.mutate()} loading={signUpStatus === "started"} />
 
                         <Text style={Styles.backToLoginLink} onPress={_onBackToLogin}>Back to Login</Text>
                         

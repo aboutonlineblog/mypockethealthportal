@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Alert} from "react-native";
-import {useNavigation, CommonActions, NavigationProp} from '@react-navigation/native';
-import {useMutation, UseMutationResult} from "@tanstack/react-query";
+import {useNavigation, CommonActions, NavigationProp} from "@react-navigation/native";
+import {useMutation} from "@tanstack/react-query";
 import {loginApi} from "@/api/login";
 import {LoginNavigationProps} from "./interafaces";
 import {UsersProps} from "@/mocks/interafaces";
@@ -31,7 +31,7 @@ export const useLoginHooks = () => {
                     index: 1,
                     routes: [
                         {
-                            name: 'Dashboard',
+                            name: "Dashboard",
                             params: {user: data},
                         },
                     ],
@@ -40,7 +40,7 @@ export const useLoginHooks = () => {
         },
         onError: (error, variables, context) => {
             Alert.alert(
-                'Login Failed',
+                "Login Failed",
                 error.message
             )
         },
@@ -60,7 +60,7 @@ export const useLoginHooks = () => {
                 index: 1,
                 routes: [
                     {
-                        name: 'Dashboard',
+                        name: "OnBoarding",
                         params: {},
                     },
                 ],
@@ -68,11 +68,11 @@ export const useLoginHooks = () => {
         );
     }
 
-    const _onChangeInputValue = (val: string, type: 'email' | 'password') => {
-        if(type === 'email') {
+    const _onChangeInputValue = (val: string, type: "email" | "password") => {
+        if(type === "email") {
             setEmail(val);
         }
-        if(type === 'password') {
+        if(type === "password") {
             setPassword(val);
         }
     }

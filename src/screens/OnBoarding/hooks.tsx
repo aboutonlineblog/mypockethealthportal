@@ -1,12 +1,30 @@
 import React, {useState} from "react";
 import {useNavigation, CommonActions, NavigationProp} from '@react-navigation/native';
 import {OnBoardingScreenProps} from "./interafaces";
+import {updateUser} from "@/api/user";
+import {useMutation} from "@tanstack/react-query";
 
 export const useOnBoarding = () => {
     const navigation = useNavigation<NavigationProp<OnBoardingScreenProps>>();
     const [currentOnBoardingPage, setCurrentOnBoardingPage] = useState<number>(0);
 
-    const _onNextPage = () => {
+    const mutateAge = useMutation({
+        mutationFn: async () => {
+
+        },
+        onSuccess: () => {
+
+        },
+        onError: () => {
+
+        },
+        onSettled: () => {
+            
+        }
+    })
+
+    const _onNextPage = async () => {
+        await updateUser();
         setCurrentOnBoardingPage((prevState: number) => prevState + 1)
     }
 

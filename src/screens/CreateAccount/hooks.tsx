@@ -8,6 +8,7 @@ import {UsersProps} from "@/mocks/interafaces";
 import {useQueryClient} from "@tanstack/react-query";
 import {validations} from "@/helpers/Validations";
 import {TextInput} from "react-native";
+import {useMutation} from "@tanstack/react-query";
 
 export const useCreateAccount = () => {
     /** HOOKS */
@@ -30,41 +31,20 @@ export const useCreateAccount = () => {
         try {
             setSignupStatus("started");
 
-            /** VALIDATIONS */
             if(name === "" || email === "" || password === "") {
-                setSignupStatus("failed");
-                Alert.alert(
-                    "Sign Up Error",
-                    "Name, email and password are required.",
-                )
-                return;
+                return {success: false, message: "Name, email and password are required.", type: "validation", payload: null}
             }
 
             if(password.length < 5) {
-                setSignupStatus("failed");
-                Alert.alert(
-                    "Sign Up Error",
-                    "Your password should be at least 4 characters long.",
-                )
-                return;
+                return {success: false, message: "Your password should be at least 4 characters long.", type: "validation", payload: null}
             }
 
             if(password !== confirmPassword) {
-                setSignupStatus("failed");
-                Alert.alert(
-                    "Sign Up Error",
-                    "Password and confirm password not matched.",
-                )
-                return;
+                return {success: false, message: "Password and confirm password not matched.", type: "validation", payload: null}
             }
 
             if(validations().isEmailValid(email) === false) {
-                setSignupStatus("failed");
-                Alert.alert(
-                    "Sign Up Error",
-                    "Email address not valid.",
-                )
-                return;
+                return {success: false, message: "Email address not valid.", type: "validation", payload: null}
             }
 
             /** API CALL */
@@ -72,32 +52,62 @@ export const useCreateAccount = () => {
 
             const userInfo: UsersProps = await loginApi(_onSignup?.email, _onSignup?.password);
 
-            queryClient.setQueryData([`CURRENT_LOGIN_USER_${userInfo.id}`], userInfo)
-
-            /** ROUTE ON SUCCESS */
-            setSignupStatus("success");
-
-            setTimeout(() => {
-                navigation.dispatch(
-                    CommonActions.reset({
-                        index: 1,
-                        routes: [
-                            {
-                                name: "OnBoarding",
-                                params: {},
-                            },
-                        ],
-                    })
-                );
-            }, 300)
+            return {success: true, message: "", payload: userInfo, type: "result"};
         } catch (error: any) {
-            setSignupStatus("failed");
-            Alert.alert(
-                "Login Error",
-                error,
-            )
+            throw new Error(`Something went wrong while creating your account. ${error}`);
         }
     }
+
+    const signupMutation = useMutation({
+        mutationFn: _onCreateAccount,
+        onSuccess: (data) => {
+            if(data?.success === false) {
+                setSignupStatus("failed");
+                Alert.alert(
+                    "Sign Up Error",
+                    data.message,
+                )
+            } else {
+                if(data && data.payload && data.payload.id) {
+                    queryClient.setQueryData([`CURRENT_LOGIN_USER_${data?.payload?.id}`], data);
+                }
+            }
+        },
+        onError: (error) => {
+            setSignupStatus("failed");
+            
+            Alert.alert(
+                "Sign Up Error",
+                error.message,
+            )
+        },
+        onSettled: (data, error) => {
+            if(data?.success === true) {
+                /** ROUTE ON SUCCESS */
+                setSignupStatus("success");
+
+                setTimeout(() => {
+                    navigation.dispatch(
+                        CommonActions.reset({
+                            index: 1,
+                            routes: [
+                                {
+                                    name: "OnBoarding",
+                                    params: {},
+                                },
+                            ],
+                        })
+                    );
+                }, 300)
+            } else {
+                setSignupStatus("failed");
+            }
+
+            if(error) {
+                setSignupStatus("failed");
+            }
+        },
+    })
 
     const _onBackToLogin = () => {
         navigation.goBack();
@@ -136,7 +146,7 @@ export const useCreateAccount = () => {
     }
 
     return {
-        _onCreateAccount, _onBackToLogin, _onChangeInputValue, signUpStatus,
+        signupMutation, _onBackToLogin, _onChangeInputValue, signUpStatus,
         nameInputRef, emailInputRef, passwordInputRef, confirmPassInputRef,
         _onNextInput, securePassword, setSecurePassword
     }
