@@ -1,10 +1,11 @@
-import React, {useState, useMemo} from "react";
+import React, {useState, useMemo, useRef} from "react";
 import {DaysArray, MonthsArr, YearArr, getAge} from "@/helpers/DayTimeFormat";
 import {PickerProps, DatePickerProps} from "./interafaces";
 import _ from "underscore";
 import {Alert} from "react-native";
+import {UseBrithdatePickerProps} from "./interafaces";
 
-export const useBirthdatePicker = () => {
+export const useBirthdatePicker = ({onChange}: UseBrithdatePickerProps) => {
     const [selectedPicker, setSelectedPicker] = useState<null | "day" | "month" | "year">(null);
     const [showPicker, setShowPicker] = useState<boolean>(false);
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
@@ -50,15 +51,35 @@ export const useBirthdatePicker = () => {
         }
     }
 
-    const _onSelectPickerItem = (payload: PickerProps) => {
+    let tempDay = useRef<number | null>(null);
+    let tempMonth = useRef<number | null>(null);
+    let tempYear = useRef<number | null>(null);
+    const _onSelectPickerItem = (payload: PickerProps) => {        
         if(selectedPicker === "day") {
             setSelectedDay(payload);
+            tempDay.current = payload.value;
         }
         if(selectedPicker === "month") {
             setSelectedMonth(payload);
+            tempMonth.current = payload.value;
         }
         if(selectedPicker === "year") {
             setSelectedYear(payload);
+            tempYear.current = payload.value;
+        }
+
+        if(tempDay.current !== null && tempMonth.current !== null && tempYear.current !== null) {
+            const currentAge = getAge(`${tempYear.current}-${tempMonth.current}-${tempDay.current}`);
+            if(onChange) {
+                onChange({
+                    age: currentAge,
+                    birthdate: {
+                        month: tempMonth.current,
+                        day: tempDay.current,
+                        year: tempYear.current
+                    }
+                });
+            }
         }
 
         setSelectedPicker(null);
@@ -69,7 +90,18 @@ export const useBirthdatePicker = () => {
         const currentAge = getAge(`${selectedDatePayload.year}-${selectedDatePayload.month}-${selectedDatePayload.day}`);
         const selectedDay = _.findWhere(DaysArray, {value: selectedDatePayload.day})
         const selectedMonth = _.findWhere(MonthsArr, {value: selectedDatePayload.month})
-        const selectedYear = _.findWhere(yearList, {value: selectedDatePayload.year})
+        const selectedYear = _.findWhere(yearList, {value: selectedDatePayload.year});
+
+        if(onChange && selectedDay !== undefined && selectedMonth !== undefined && selectedYear !== undefined) {
+            onChange({
+                age: currentAge,
+                birthdate: {
+                    month: selectedMonth?.value,
+                    day: selectedDay?.value,
+                    year: selectedYear?.value
+                }
+            });
+        }
  
         if(!selectedYear || currentAge < 10) {
             Alert.alert(

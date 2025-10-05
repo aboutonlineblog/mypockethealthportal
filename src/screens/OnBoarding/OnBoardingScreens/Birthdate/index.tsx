@@ -7,7 +7,7 @@ import {Colors} from "@/config/theme";
 import {PickerProps, OnBoardingProps} from "./interafaces";
 import {Calendar} from 'react-native-calendars';
 
-const BirthdatePicker = ({onNext, onSkip}: OnBoardingProps) => {
+const BirthdatePicker = ({onNext, onSkip, onChange}: OnBoardingProps) => {
     const Styles = useStyles();
     const {
         _onPickDay, _onPickMonth, _onPickYear, showPicker, setShowPicker, pickerData,
@@ -15,7 +15,7 @@ const BirthdatePicker = ({onNext, onSkip}: OnBoardingProps) => {
         onSelectDate, getDateInfo, showCalendar, setShowCalendar, _onChangeCalendarMonth, 
         _onChangeCalendarYear, showCalendarChangeMonth, _onSelectMonth, showCalendarChangeYear,
         _onSelectYear
-    } = useBirthdatePicker();
+    } = useBirthdatePicker({onChange});
 
     return (
         <View style={Styles.container}>

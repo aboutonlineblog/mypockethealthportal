@@ -18,7 +18,7 @@ import BirthdatePicker from "./OnBoardingScreens/Birthdate";
 const OnBoarding = () => {
     const Styles = useStyles();
     const GlobalStyles = useGlobalStyles();
-    const {_onNextPage, currentOnBoardingPage, _onFinishedOnBoarding} = useOnBoarding();
+    const {_onNextPage, currentOnBoardingPage, _onFinishedOnBoarding, _onGetAge} = useOnBoarding();
 
     return (
         <ImageBackground source={LoginBG} style={Styles.container}>
@@ -36,7 +36,7 @@ const OnBoarding = () => {
 
                     <View style={Styles.formWrapper}>
                         {currentOnBoardingPage === 0 ? (
-                            <BirthdatePicker onNext={_onNextPage} />
+                            <BirthdatePicker onNext={_onNextPage} onChange={_onGetAge} />
                         ) : <View onLayout={_onFinishedOnBoarding} />}
                     </View>
                     

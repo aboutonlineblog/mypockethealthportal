@@ -69,7 +69,7 @@ export const useCreateAccount = () => {
                 )
             } else {
                 if(data && data.payload && data.payload.id) {
-                    queryClient.setQueryData([`CURRENT_LOGIN_USER_${data?.payload?.id}`], data);
+                    queryClient.setQueryData([`CURRENT_LOGIN_USER_${data?.payload?.id}`], data.payload);
                 }
             }
         },
@@ -93,7 +93,7 @@ export const useCreateAccount = () => {
                             routes: [
                                 {
                                     name: "OnBoarding",
-                                    params: {},
+                                    params: {user: data.payload},
                                 },
                             ],
                         })
