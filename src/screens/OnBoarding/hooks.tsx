@@ -21,7 +21,6 @@ export const useOnBoarding = () => {
             return await updateUser({age: currentAge}, route.params?.user?.id);
         },
         onSuccess: (data) => {
-            console.log("data", data)
             queryClient.setQueryData([`CURRENT_USER_LOGIN_${route.params?.user?.id}`], data)
             setSavingChanges(false);
         },
@@ -69,7 +68,7 @@ export const useOnBoarding = () => {
                 routes: [
                     {
                         name: 'Dashboard',
-                        params: {user: route.params?.user},
+                        params: {user: queryClient.getQueryData([`CURRENT_USER_LOGIN_${route.params?.user?.id}`])},
                     },
                 ],
             })
