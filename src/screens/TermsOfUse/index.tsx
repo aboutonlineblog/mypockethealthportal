@@ -196,7 +196,7 @@ You may not use our intellectual property without our written consent.`}
                 <View style={Styles.sectionContainer}>
                     <Text style={Styles.section}>
                         <Text style={Styles.title}>Contact Us</Text>
-                        {`\n\nIf you have questions or concerns about these Terms, `}<Text style={Styles.link} onPress={_onContactUs}>please send us a message</Text>
+                        {`\n\nIf you have questions or concerns about these Terms, `}<Text style={Styles.link} onPress={_onContactUs}>please send us a message.</Text>
                     </Text>
                 </View>
             </ScrollView>
