@@ -7,7 +7,11 @@ const {height} = Dimensions.get("window");
 export const useStyles = () => {
     return StyleSheet.create({
         container: {
-
+            padding: 10,
+            flex: 1
+        },
+        scrollView: {
+            flex: 1
         }
     })
 }

@@ -3,7 +3,6 @@ export type BulletProps = {
     label: string;
 }
 
-export type TermsOfUseNavigationProps = {
-    PrivacyPolicy: {} | undefined;
+export type PrivacyPolicyNavigationProps = {
     ContactUs: {} | undefined;
 };
