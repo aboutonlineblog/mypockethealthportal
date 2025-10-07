@@ -82,7 +82,7 @@ const RootStack = createNativeStackNavigator({
         },
         TermsOfUse: {
             screen: TermsOfUseScreen,
-            options: ScreenOptions("Terms Of Use"),
+            options: ScreenOptions("Terms Of Service"),
         },
         PrivacyPolicy: {
             screen: PrivacyPolicyScreen,
