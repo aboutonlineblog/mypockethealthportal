@@ -23,9 +23,9 @@ const tabOptions = (tabName: string) => {
         tabBarIcon: ({focused, color, size}: TabBarIconProps) => {
             if(tabName === 'apps') {
                 if(focused) {
-                    return <Icon name="apps" size={20} color={Colors.tab_active_color} />;
+                    return <Icon name="apps" size={25} color={Colors.tab_active_color} />;
                 }
-                return <Icon name="apps-outline" size={20} />;
+                return <Icon name="apps-outline" size={25} />;
             }
 
             if(tabName === 'stats') {
@@ -44,9 +44,9 @@ const tabOptions = (tabName: string) => {
 
             if(tabName === 'settings') {
                 if(focused) {
-                    return <Icon name="cog" size={20} color={Colors.tab_active_color} />;
+                    return <Icon name="cog" size={25} color={Colors.tab_active_color} />;
                 }
-                return <Icon name="cog-outline" size={20} />;
+                return <Icon name="cog-outline" size={25} />;
             }
 
             return null;
@@ -57,10 +57,19 @@ const tabOptions = (tabName: string) => {
 
 const Dashboard = () => {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            screenOptions={{
+                tabBarStyle: {
+                    borderTopWidth: 0,
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    // backgroundColor: '#D5E7FF'
+                },
+            }}
+        >
             <Tab.Screen name="Apps" component={AppsTab} options={tabOptions('apps')} />
-            {/* <Tab.Screen name="Stats" component={StatsTab} options={tabOptions('stats')} />
-            <Tab.Screen name="Diary" component={DiaryTab} options={tabOptions('diary')} /> */}
+            {/* <Tab.Screen name="Stats" component={StatsTab} options={tabOptions('stats')} /> */}
+            {/* <Tab.Screen name="Diary" component={DiaryTab} options={tabOptions('diary')} /> */}
             <Tab.Screen name="Settings" component={SettingsTab} options={tabOptions('settings')} />
         </Tab.Navigator>
     )

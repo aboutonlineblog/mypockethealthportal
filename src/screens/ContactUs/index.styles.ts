@@ -7,7 +7,8 @@ const {height} = Dimensions.get("window");
 export const useStyles = () => {
     return StyleSheet.create({
         container: {
-
+            flex: 1,
+            backgroundColor: Colors.screen_background
         }
     })
 }

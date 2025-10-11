@@ -104,7 +104,8 @@ export const useGlobalStyles = () => {
             fontSize: 14
         },
         bulletContainer: {
-            marginBottom: 20
+            marginBottom: 20,
+            width: width * 0.9,
         },
         link: {
             color: 'blue',

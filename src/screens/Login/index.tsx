@@ -13,7 +13,7 @@ import {useGlobalStyles} from "@/config/globalStyles.styles";
 import {APP_TITLE, USE_APP_LOGO} from "@/config/app";
 import Button from "@/modules/Button";
 import {useLoginHooks} from "./hooks";
-import LoginBG from "./assets/bg.jpg";
+import AppBG from "@/assets/bg.jpg";
 import GoogleIcon from "./assets/google_logo.png";
 import PackageJSON from "../../../package.json";
 import AppLogo from "./assets/app_logo.png";
@@ -24,7 +24,7 @@ const Login = () => {
     const {_onGoogleLogin, _onLogin, _onChangeInputValue, _onGoToCreateAccount} = useLoginHooks();
 
     return (
-        <ImageBackground source={LoginBG} style={Styles.container}>
+        <ImageBackground source={AppBG} style={Styles.container}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={Styles.formContainer}>
                     <KeyboardAvoidingView style={Styles.keyboardAvoidingView} behavior="padding">

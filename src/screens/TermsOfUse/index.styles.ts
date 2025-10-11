@@ -8,7 +8,8 @@ export const useStyles = () => {
     return StyleSheet.create({
         container: {
             padding: 10,
-            flex: 1
+            flex: 1,
+            backgroundColor: Colors.screen_background
         },
         scrollView: {
             flex: 1

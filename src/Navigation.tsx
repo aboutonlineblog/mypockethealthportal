@@ -26,7 +26,7 @@ const ScreenOptions = (title: string) => {
         headerTitle: title,
         headerShadowVisible: false,
         headerStyle: {
-            backgroundColor: Colors.screen_background
+            backgroundColor: "#D5E7FF" //Colors.screen_background
         },
     }
 }

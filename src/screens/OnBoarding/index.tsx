@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import {useStyles} from "./index.styles";
 import {useGlobalStyles} from "@/config/globalStyles.styles";
-import LoginBG from "@/screens/Login/assets/bg.jpg";
+import AppBG from "@/assets/bg.jpg";
 import {useOnBoarding} from "./hooks";
 
 /** SUB-SCREENS */
@@ -21,7 +21,7 @@ const OnBoarding = () => {
     const {_onNextPage, currentOnBoardingPage, _onFinishedOnBoarding, _onGetAge} = useOnBoarding();
 
     return (
-        <ImageBackground source={LoginBG} style={Styles.container}>
+        <ImageBackground source={AppBG} style={Styles.container}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={Styles.formContainer}>
 

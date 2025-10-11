@@ -13,7 +13,7 @@ import {useStyles} from "./index.styles";
 import {useGlobalStyles} from "@/config/globalStyles.styles";
 import {APP_TITLE, USE_APP_LOGO} from "@/config/app";
 import Button from "@/modules/Button";
-import LoginBG from "@/screens/Login/assets/bg.jpg";
+import AppBG from "@/assets/bg.jpg";
 import AppLogo from "@/screens/Login/assets/app_logo.png";
 import {useCreateAccount} from "./hooks";
 import Icon from "react-native-vector-icons/Feather";
@@ -29,7 +29,7 @@ const CreateAccount = () => {
     } = useCreateAccount();
 
     return (
-        <ImageBackground source={LoginBG} style={Styles.container}>
+        <ImageBackground source={AppBG} style={Styles.container}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={Styles.formContainer}>
                     <KeyboardAvoidingView style={Styles.keyboardAvoidingView} behavior="padding">
