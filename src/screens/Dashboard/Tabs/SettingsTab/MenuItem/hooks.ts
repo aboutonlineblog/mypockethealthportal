@@ -24,6 +24,9 @@ export const useMenuItemHooks = () => {
             if(route === 'PrivacyPolicy') {
                 navigation.navigate("PrivacyPolicy")
             }
+            if(route === 'ManageAccount') {
+                navigation.navigate("ManageAccount")
+            }
         }
     }
 

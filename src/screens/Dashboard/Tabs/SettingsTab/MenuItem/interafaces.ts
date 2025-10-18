@@ -3,6 +3,8 @@ export type MenuRenderItemNavigation = {
     ContactUs: {} | undefined;
     TermsOfUse: {} | undefined;
     PrivacyPolicy: {} | undefined;
+    ManageAccount: {} | undefined;
+    Login: {} | undefined;
 };
 
 export type MenuRenderItemProps = {
@@ -10,4 +12,5 @@ export type MenuRenderItemProps = {
     name: string;
     description: string;
     route: string | null;
+    icon: string | null;
 }

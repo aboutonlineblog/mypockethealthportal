@@ -32,5 +32,21 @@ export const users: Array<UsersProps> = [
         height: 170,
         height_unit_type: "cm",
         gender: "male",
+    },
+    {
+        id: 1,
+        first_name: "ekker",
+        last_name: "pumanes",
+        full_name: "ekker gwapo",
+        premium_member: false,
+        admin: false,
+        email: "ekker@gmail.com",
+        password: "letmein123", //<-- will be hashed in the backend
+        age: 33,
+        weight: 84,
+        weight_unit_type: "kg",
+        height: 170,
+        height_unit_type: "cm",
+        gender: "male",
     }
 ]

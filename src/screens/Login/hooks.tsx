@@ -1,10 +1,11 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import {Alert} from "react-native";
 import {useNavigation, CommonActions, NavigationProp} from "@react-navigation/native";
 import {useMutation} from "@tanstack/react-query";
 import {loginApi} from "@/api/login";
 import {LoginNavigationProps} from "./interafaces";
 import {UsersProps} from "@/mocks/interafaces";
+import {TextInput} from "react-native";
 
 type LoginParams = {
     e: string;
@@ -18,6 +19,10 @@ export const useLoginHooks = () => {
     /** STATES */
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [securePassword, setSecurePassword] = useState<boolean>(true);
+
+    const emailInputRef = useRef<TextInput>(null);
+    const passwordInputRef = useRef<TextInput>(null);
 
     /** MUTATIONS */
     const loginMutation = useMutation({
@@ -81,5 +86,17 @@ export const useLoginHooks = () => {
         navigation.navigate("CreateAccount");
     }
 
-    return {_onLogin, _onGoogleLogin, email, password, _onChangeInputValue, _onGoToCreateAccount}
+    const _onNextInput = (nextInput: string) => {
+        if(nextInput === "email") {
+            emailInputRef.current?.focus();
+        }
+        if(nextInput === "password") {
+            passwordInputRef.current?.focus();
+        }
+    }
+
+    return {
+        _onLogin, _onGoogleLogin, email, password, _onChangeInputValue, _onGoToCreateAccount,
+        securePassword, setSecurePassword, emailInputRef, passwordInputRef, _onNextInput
+    }
 }

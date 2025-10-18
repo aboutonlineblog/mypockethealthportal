@@ -14,6 +14,7 @@ import TermsOfUseScreen from "@/screens/TermsOfUse";
 import PrivacyPolicyScreen from "@/screens/PrivacyPolicy";
 import CreateAccountScreen from "@/screens/CreateAccount";
 import OnBoardingScreen from "@/screens/OnBoarding";
+import ManageAccountScreen from "@/screens/ManageAccount";
 
 /** SUB SCREEN */
 import FastingTrackerHistoryScreen from "@/screens/FastingTracker/FastingHistory";
@@ -26,8 +27,9 @@ const ScreenOptions = (title: string) => {
         headerTitle: title,
         headerShadowVisible: false,
         headerStyle: {
-            backgroundColor: "#D5E7FF" //Colors.screen_background
+            backgroundColor: Colors.primary
         },
+        headerTintColor: Colors.text_dark_color
     }
 }
 
@@ -75,6 +77,10 @@ const RootStack = createNativeStackNavigator({
         AccountProfile: {
             screen: AccountProfileScreen,
             options: ScreenOptions("Account Profile"),
+        },
+        ManageAccount: {
+            screen: ManageAccountScreen,
+            options: ScreenOptions("Manage Account"),
         },
         ContactUs: {
             screen: ContactUsScreen,

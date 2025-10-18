@@ -5,7 +5,7 @@ import {
     KeyboardAvoidingView, 
     Keyboard, 
     TouchableWithoutFeedback, 
-    Platform, TextInput,
+    TouchableOpacity, TextInput,
     ImageBackground, Image
 } from "react-native";
 import {useStyles} from "./index.styles";
@@ -17,11 +17,16 @@ import AppBG from "@/assets/bg.jpg";
 import GoogleIcon from "./assets/google_logo.png";
 import PackageJSON from "../../../package.json";
 import AppLogo from "./assets/app_logo.png";
+import Icon from "react-native-vector-icons/Feather";
+import {Colors} from "@/config/theme";
 
 const Login = () => {
     const Styles = useStyles();
     const GlobalStyles = useGlobalStyles();
-    const {_onGoogleLogin, _onLogin, _onChangeInputValue, _onGoToCreateAccount} = useLoginHooks();
+    const {
+        _onGoogleLogin, _onLogin, _onChangeInputValue, _onGoToCreateAccount, securePassword,
+        emailInputRef, passwordInputRef, _onNextInput, setSecurePassword
+    } = useLoginHooks();
 
     return (
         <ImageBackground source={AppBG} style={Styles.container}>
@@ -39,6 +44,7 @@ const Login = () => {
                         <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Email</Text>
                             <TextInput 
+                                ref={emailInputRef}
                                 autoCapitalize="none"
                                 keyboardType="email-address"
                                 autoComplete="off"
@@ -46,16 +52,28 @@ const Login = () => {
                                 style={[GlobalStyles.input, Styles.input]} 
                                 placeholder="Enter email address" 
                                 placeholderTextColor="#b5b5b5"
-                                onChangeText={(val: string) => _onChangeInputValue(val, 'email')} />
+                                onChangeText={(val: string) => _onChangeInputValue(val, 'email')}
+                                returnKeyType="next"
+                                onSubmitEditing={() => _onNextInput("password")} />
                         </View>
                         <View style={GlobalStyles.inputWrapper}>
                             <Text style={Styles.formLabel}>Password</Text>
-                            <TextInput 
-                                style={[GlobalStyles.input, Styles.input]} 
-                                placeholder="Enter password" 
-                                placeholderTextColor="#b5b5b5"
-                                secureTextEntry={true}
-                                onChangeText={(val: string) => _onChangeInputValue(val, 'password')} />
+                            <View style={[Styles.inputWrapper, Styles.input]}>
+                                <TextInput 
+                                    ref={passwordInputRef}
+                                    style={[GlobalStyles.inputWithIcon]} 
+                                    placeholder="Enter password" 
+                                    placeholderTextColor="#b5b5b5"
+                                    secureTextEntry={securePassword}
+                                    autoCapitalize="none"
+                                    onChangeText={(val: string) => _onChangeInputValue(val, 'password')}
+                                    returnKeyType="go"
+                                    onSubmitEditing={_onLogin} 
+                                />
+                                <TouchableOpacity style={Styles.showPassBtn} onPress={() => setSecurePassword(!securePassword)}>
+                                    <Icon name={securePassword === true ? "eye" : "eye-off"} size={Styles.showPassBtn.width * 0.7} color={Colors.black} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         <Button label="Login" onPress={_onLogin} />
                         <Button label="Create Account" onPress={_onGoToCreateAccount} />

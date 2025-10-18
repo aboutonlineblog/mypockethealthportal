@@ -14,10 +14,10 @@ export const useStyles = () => {
         headerStyle: {
             fontWeight: 'bold',
             fontSize: (width * 0.9) * 0.075,
-            color: Colors.black
+            color: Colors.tab_bg_color
         },
         headerDescStyle: {
-            color: Colors.black,
+            color: Colors.tab_bg_color,
             fontSize: 16,
             textAlign: 'center'
         },
@@ -27,7 +27,7 @@ export const useStyles = () => {
             backgroundColor: Colors.screen_background,
             marginVertical: 20,
             borderWidth: 1,
-            borderColor: Colors.black,
+            borderColor: Colors.tab_bg_color,
             borderRadius: (width * 0.8) / 2,
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -68,7 +68,8 @@ export const useStyles = () => {
         birthdateLabel: {
             fontSize: useGlobalStyles().input.height * 0.6,
             fontWeight: 'bold',
-            textAlign: 'center'
+            textAlign: 'center',
+            color: Colors.tab_bg_color
         },
         birthdateLabelContainer: {
             flex: 1,
@@ -93,13 +94,17 @@ export const useStyles = () => {
         footerButton: {
             width: (width * 0.8) * 0.35,
             height: 40,
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.tab_bg_color,
             borderRadius: ((width * 0.8) * 0.35) / 2,
             justifyContent: 'center',
             alignItems: 'center',
         },
-        footerButtonLabel: {
-            color: Colors.screen_background,
+        footerButtonLabelNext: {
+            color: Colors.tab_active_color,
+            fontWeight: 'bold'
+        },
+        footerButtonLabelSkip: {
+            color: Colors.tab_inactive_color,
             fontWeight: 'bold'
         },
         calendarButton: {

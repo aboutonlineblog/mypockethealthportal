@@ -37,12 +37,14 @@ export const useStyles = () => {
         screenTitle: {
             fontSize: width * 0.125,
             fontWeight: 'bold',
-            textAlign: 'left'
+            textAlign: 'left',
+            color: Colors.tab_bg_color
         },
         screenDesc: {
             fontSize: 16,
             marginTop: 20,
             lineHeight: 20,
+            color: Colors.tab_bg_color
         },
         bulletsContainer: {
             width: width * 0.9,

@@ -3,36 +3,49 @@ export default [
         id: 1,
         name: "Profile",
         description: "",
-        route: 'AccountProfile'
+        route: "AccountProfile",
+        icon: "user",
     },
     {
         id: 2,
-        name: "Contact Us",
+        name: "Manage Account",
         description: "",
-        route: 'ContactUs'
+        route: "ManageAccount",
+        icon: "clipboard-user",
     },
     {
         id: 3,
-        name: "Terms of Use",
+        name: "Contact Us",
         description: "",
-        route: 'TermsOfUse'
+        route: "ContactUs",
+        icon: "phone",
     },
     {
         id: 4,
-        name: "Privacy Policy",
+        name: "Terms of Use",
         description: "",
-        route: 'PrivacyPolicy'
+        route: "TermsOfUse",
+        icon: "handshake",
     },
     {
         id: 5,
-        name: "dev-1",
+        name: "Privacy Policy",
         description: "",
-        route: null
+        route: "PrivacyPolicy",
+        icon: "user-secret",
     },
     {
         id: 6,
+        name: "dev-1",
+        description: "",
+        route: null,
+        icon: null,
+    },
+    {
+        id: 7,
         name: "Logout",
         description: "",
-        route: 'logout'
+        route: "logout",
+        icon: "arrow-right-from-bracket",
     }
 ]

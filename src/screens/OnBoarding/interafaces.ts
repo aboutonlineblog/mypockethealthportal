@@ -27,3 +27,8 @@ export type OnBoardingParamListBase = {
         user: UsersProps
     } | undefined;
 }
+
+export type MutationProps = {
+    currentAge: number;
+    userId: number;
+}

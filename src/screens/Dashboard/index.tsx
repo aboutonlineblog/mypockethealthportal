@@ -25,33 +25,34 @@ const tabOptions = (tabName: string) => {
                 if(focused) {
                     return <Icon name="apps" size={25} color={Colors.tab_active_color} />;
                 }
-                return <Icon name="apps-outline" size={25} />;
+                return <Icon name="apps-outline" size={25} color={Colors.tab_inactive_color} />;
             }
 
             if(tabName === 'stats') {
                 if(focused) {
                     return <Icon name="stats-chart" size={20} color={Colors.tab_active_color} />;
                 }
-                return <Icon name="stats-chart-outline" size={20} />;
+                return <Icon name="stats-chart-outline" size={20} color={Colors.tab_inactive_color} />;
             }
 
             if(tabName === 'diary') {
                 if(focused) {
                     return <Icon name="book" size={20} color={Colors.tab_active_color} />;
                 }
-                return <Icon name="book-outline" size={20} />;
+                return <Icon name="book-outline" size={20} color={Colors.tab_inactive_color} />;
             }
 
             if(tabName === 'settings') {
                 if(focused) {
                     return <Icon name="cog" size={25} color={Colors.tab_active_color} />;
                 }
-                return <Icon name="cog-outline" size={25} />;
+                return <Icon name="cog-outline" size={25} color={Colors.tab_inactive_color} />;
             }
 
             return null;
         },
-        tabBarActiveTintColor: Colors.tab_active_color
+        tabBarActiveTintColor: Colors.tab_active_color,
+        tabBarInactiveTintColor: Colors.tab_inactive_color
     }
 };
 
@@ -63,7 +64,9 @@ const Dashboard = () => {
                     borderTopWidth: 0,
                     elevation: 0,
                     shadowOpacity: 0,
-                    // backgroundColor: '#D5E7FF'
+                    backgroundColor: Colors.tab_bg_color,
+                    borderTopLeftRadius: 18,
+                    borderTopRightRadius: 18,
                 },
             }}
         >

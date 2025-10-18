@@ -79,6 +79,19 @@ export const useStyles = () => {
         formLabel: {
             fontWeight: 'bold',
             marginLeft: 17
+        },
+        inputWrapper: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: useGlobalStyles().input.width / 2,
+            borderWidth: 1
+        },
+        showPassBtn: {
+            width: useGlobalStyles().input.height * 0.9,
+            height: useGlobalStyles().input.height * 0.9,
+            justifyContent: 'center',
+            alignItems: 'center',
         }
     })
 }

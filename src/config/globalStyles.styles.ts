@@ -61,21 +61,25 @@ export const useGlobalStyles = () => {
         /** TERMS OF SERVICE AND PRIVACY POLICY */
         title: {
             fontSize: 20,
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            color: Colors.text_dark_color
         },
         heading: {
             fontSize: 16,
             fontWeight: 'bold',
-            lineHeight: 40
+            lineHeight: 40,
+            color: Colors.text_dark_color
         },
         lastUpdateLabel: {
             fontSize: 14,
             marginBottom: 20,
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            color: Colors.text_dark_color
         },
         intro: {
             fontSize: 14,
-            marginBottom: 10
+            marginBottom: 10,
+            color: Colors.text_dark_color
         },
         sectionContainer: {
             marginVertical: 10
@@ -93,22 +97,24 @@ export const useGlobalStyles = () => {
             width: 10,
             height: 10,
             borderRadius: 5,
-            backgroundColor: "#000",
+            backgroundColor: Colors.text_dark_color,
             marginRight: 10
         },
         highlight: {
             fontSize: 14,
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            color: Colors.text_dark_color
         },
         normalSize: {
-            fontSize: 14
+            fontSize: 14,
+            color: Colors.text_dark_color
         },
         bulletContainer: {
             marginBottom: 20,
             width: width * 0.9,
         },
         link: {
-            color: 'blue',
+            color: Colors.link_color,
             textDecorationLine: 'underline',
             fontWeight: 'bold'
         }

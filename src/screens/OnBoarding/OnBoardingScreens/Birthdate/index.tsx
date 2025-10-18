@@ -89,12 +89,12 @@ const BirthdatePicker = ({onNext, onSkip, onChange}: OnBoardingProps) => {
                     <TouchableOpacity style={Styles.footerButton} onPress={() => {
                         if(onSkip) onSkip();
                     }}>
-                        <Text style={Styles.footerButtonLabel}>Skip</Text>
+                        <Text style={Styles.footerButtonLabelSkip}>Skip</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={Styles.footerButton} onPress={() => {
                         if(onNext) onNext();
                     }}>
-                        <Text style={Styles.footerButtonLabel}>Next</Text>
+                        <Text style={Styles.footerButtonLabelNext}>Next</Text>
                     </TouchableOpacity>
                 </View>
             </View>

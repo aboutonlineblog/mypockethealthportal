@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useNavigation, CommonActions, NavigationProp, useRoute, RouteProp} from '@react-navigation/native';
-import {OnBoardingScreenProps, OnBoardingParamListBase} from "./interafaces";
+import {OnBoardingScreenProps, OnBoardingParamListBase, MutationProps} from "./interafaces";
 import {updateUser} from "@/api/user";
 import {useMutation} from "@tanstack/react-query";
 import {OnBoardingOnChangeProps} from "./OnBoardingScreens/Birthdate/interafaces";
@@ -15,10 +15,10 @@ export const useOnBoarding = () => {
     const [currentOnBoardingPage, setCurrentOnBoardingPage] = useState<number>(0);
     const [currentAge, setCurrentAge] = useState<number>(0);
     const [savingChanges, setSavingChanges] = useState<boolean>(false);
-
+    console.log("route.params", route.params)
     const mutateAge = useMutation({
-        mutationFn: async (currentAge: number) => {
-            return await updateUser({age: currentAge}, route.params?.user?.id);
+        mutationFn: async ({currentAge, userId}: MutationProps) => {
+            return await updateUser({age: currentAge}, userId);
         },
         onSuccess: (data) => {
             queryClient.setQueryData([`CURRENT_USER_LOGIN_${route.params?.user?.id}`], data)
@@ -26,12 +26,14 @@ export const useOnBoarding = () => {
         },
         onError: (error) => {
             Alert.alert(
-                "Sign Up Error",
+                "Update Account Error",
                 error.message,
             )
         },
-        onSettled: () => {
-            setCurrentOnBoardingPage((prevState: number) => prevState + 1)
+        onSettled: (data, error) => {
+            if(data && !error) {
+                setCurrentOnBoardingPage((prevState: number) => prevState + 1)
+            }
         }
     })
 
@@ -43,7 +45,14 @@ export const useOnBoarding = () => {
             )
         } else {
             setSavingChanges(true);
-            mutateAge.mutate(currentAge)
+            if(route.params?.user?.id) {
+                mutateAge.mutate({currentAge, userId: route.params?.user?.id})
+            } else {
+               Alert.alert(
+                    "Unauthorized Access",
+                    "User have no permission to access or not authenticated."
+                ) 
+            }
         }
     }
 

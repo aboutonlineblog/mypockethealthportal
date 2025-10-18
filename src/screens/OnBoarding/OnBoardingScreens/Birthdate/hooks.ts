@@ -114,6 +114,7 @@ export const useBirthdatePicker = ({onChange}: UseBrithdatePickerProps) => {
         setSelectedDay(selectedDay as PickerProps);
         setSelectedMonth(selectedMonth as PickerProps);
         setSelectedYear(selectedYear as PickerProps);
+        setShowCalendar(false);
     }
 
     const getDateInfo = (date: string) => {

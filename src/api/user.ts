@@ -19,6 +19,9 @@ export type UploadUserPayload = {
 }
 
 export const updateUser = async (payload: UploadUserPayload, userId?: number) => {
+    console.log("payload", payload)
+    console.log("userId", userId)
+    
     if(userId !== undefined && payload !== undefined) {
         let user = users.filter((u: UsersProps) => u.id === userId)[0];
         if(user && user.age === null && payload && payload.age) user["age"] = payload.age;
@@ -26,5 +29,5 @@ export const updateUser = async (payload: UploadUserPayload, userId?: number) =>
         return user;
     }
 
-    throw new Error("Email and password is required.")
+    throw new Error("User not found")
 }

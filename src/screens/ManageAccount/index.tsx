@@ -1,11 +1,11 @@
 import React, {useCallback} from "react";
 import {View, FlatList} from "react-native";
 import MenuList from "./menu_list";
-import useStyles from "./index.styles";
-import MenuItem from "./MenuItem";
+import {useStyles} from "./index.styles";
 import {MenuRenderProps} from "./interafaces";
+import MenuItem from "./MenuItem";
 
-const SettingsTab = () => {
+const ManageAccount = () => {
     const Styles = useStyles();
 
     const RenderItem = useCallback(({item}: MenuRenderProps) => {
@@ -25,4 +25,4 @@ const SettingsTab = () => {
     )
 }
 
-export default SettingsTab;
+export default ManageAccount;

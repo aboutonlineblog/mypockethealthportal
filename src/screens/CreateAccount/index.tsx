@@ -83,7 +83,7 @@ const CreateAccount = () => {
                                     secureTextEntry={securePassword}
                                     autoCapitalize="none"
                                     onChangeText={(val: string) => _onChangeInputValue(val, "password")} 
-                                    returnKeyType="next"
+                                    returnKeyType="go"
                                     onSubmitEditing={() => _onNextInput("confirm_password")}
                                 />
                                 <TouchableOpacity style={Styles.showPassBtn} onPress={() => setSecurePassword(!securePassword)}>
