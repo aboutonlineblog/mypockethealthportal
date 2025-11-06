@@ -8,8 +8,8 @@ export const users: Array<UsersProps> = [
         full_name: "neil te",
         premium_member: false,
         admin: false,
-        email: "aboutonlineblog@gmail.com",
-        password: "letmein123", //<-- will be hashed in the backend
+        email: "neil@gmail.com",
+        password: "letmein", //<-- will be hashed in the backend
         age: 37,
         weight: 84,
         weight_unit_type: "kg",

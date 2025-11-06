@@ -1,0 +1,30 @@
+[
+    {
+        "id": "feedback",
+        "type": "feedback",
+        "error_message": "Unable to send feedback at this moment due to connection error. Please try again later.",
+        "success_message": "We truly appreciate you taking the time to share your thoughts with us. Your input helps us improve and create a better experience for you.",
+        "label": "Feedback"
+    },
+    {
+        "id": "feature_request",
+        "type": "feature request",
+        "error_message": "Unable to send feature request at this moment due to connection error. Please try again later.",
+        "success_message": "We appreciate you taking the time to share your idea with us. Your feedback helps us improve and bring more features that matter to you.",
+        "label": "Feature Request"
+    },
+    {
+        "id": "help",
+        "type": "need help (support)",
+        "error_message": "Unable to send support request at this moment due to connection error. Please try again later.",
+        "success_message": "Thank you for reaching out! We’ve received your support request and our team will get back to you as soon as possible. We appreciate your patience and will do our best to help you quickly.",
+        "label": "Support"
+    },
+    {
+        "id": "bug_report",
+        "type": "bug report",
+        "error_message": "Unable to send bug report at this moment due to connection error. Please try again later.",
+        "success_message": "Thank you for reaching out! We’ve received your bug report, we'll look in to this and sort this out as soon as possible.",
+        "label": "Bug Report"
+    }
+]

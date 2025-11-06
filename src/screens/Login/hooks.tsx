@@ -17,8 +17,8 @@ export const useLoginHooks = () => {
     const navigation = useNavigation<NavigationProp<LoginNavigationProps>>();
 
     /** STATES */
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>("neil@gmail.com");
+    const [password, setPassword] = useState<string>("letmein");
     const [securePassword, setSecurePassword] = useState<boolean>(true);
 
     const emailInputRef = useRef<TextInput>(null);
@@ -31,17 +31,31 @@ export const useLoginHooks = () => {
             return user;
         },
         onSuccess: (data, variables, context) => {
-            navigation.dispatch(
-                CommonActions.reset({
-                    index: 1,
-                    routes: [
-                        {
-                            name: "Dashboard",
-                            params: {user: data},
-                        },
-                    ],
-                })
-            );
+            if(data.age === null) {
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 1,
+                        routes: [
+                            {
+                                name: "OnBoarding",
+                                params: {user: data},
+                            },
+                        ],
+                    })
+                );
+            } else {
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 1,
+                        routes: [
+                            {
+                                name: "Dashboard",
+                                params: {user: data},
+                            },
+                        ],
+                    })
+                );
+            }
         },
         onError: (error, variables, context) => {
             Alert.alert(
