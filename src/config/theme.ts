@@ -13,5 +13,7 @@ export const Colors = {
     app_bg_color: "#f5f5f5",
     stop_color: "#f26822",
     black: "#000000",
-    active_radio_button: "#82c4faff"
+    active_radio_button: "#82c4faff",
+    placeholderColor: "#b3b3b3",
+    dark_gray: "#969997"
 }

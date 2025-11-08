@@ -20,5 +20,6 @@ export interface DropDownPickerProps {
     rightIcon?: () => React.ReactNode;
     leftIcon?: () => React.ReactNode;
     formLabel?: string;
-    data: Array<ListOfConcernsProps>
+    data: Array<ListOfConcernsProps>;
+    onSelect?: (v: ListOfConcernsProps) => void;
 }

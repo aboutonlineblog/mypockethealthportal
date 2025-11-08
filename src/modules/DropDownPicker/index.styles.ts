@@ -29,9 +29,6 @@ export const useStyles = () => {
             justifyContent: "center",
             alignItems: "center"
         },
-        inputLabel: {
-            marginBottom: 5
-        },
         dropDownContainer: {
             width: width * 0.89,
             height: 200,
@@ -40,7 +37,8 @@ export const useStyles = () => {
             top: useGlobalStyles().input.height,
             borderWidth: 1,
             borderRadius: 10,
-            overflow: "hidden"
+            overflow: "hidden",
+            backgroundColor: Colors.screen_background
         },
         pickerItemStyle: {
             width: "100%",

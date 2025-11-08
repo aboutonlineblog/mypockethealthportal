@@ -6,19 +6,24 @@ import {useDropDownPicker} from "./hooks";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {Colors} from "@/config/theme";
 import {FlatList, GestureHandlerRootView} from 'react-native-gesture-handler';
+import {useGlobalStyles} from "@/config/globalStyles.styles";
 
 const DropDownPicker = ({
     placeholder, onLeftIconClick, onRightIconClick, rightIcon, leftIcon,
-    formLabel, data
+    formLabel, data, onSelect
 }: DropDownPickerProps) => {
     const {_onTapDrownDown, showDropDown, _onSelectConcern, selectedConcern} = useDropDownPicker();
     const Styles = useStyles();
+    const GlobalStyle = useGlobalStyles();
 
     const RenderPickerItem = React.useCallback(({item, index}: PickerItemProps) => {
         const isLastItem = index === (data.length - 1);
 
         return (
-            <TouchableOpacity onPress={() => _onSelectConcern(item)}>
+            <TouchableOpacity onPress={() => {
+                _onSelectConcern(item);
+                if(onSelect) onSelect(item);
+            }}>
                 <View style={isLastItem ? Styles.pickerLastItemStyle : Styles.pickerItemStyle}>
                     <Text>{item.label}</Text>
                 </View>
@@ -28,7 +33,7 @@ const DropDownPicker = ({
 
     return (
         <View>
-            {formLabel && (<Text style={Styles.inputLabel}>{formLabel}</Text>)}
+            {formLabel && (<Text style={GlobalStyle.formLabel}>{formLabel}</Text>)}
             <View style={Styles.container}>
                 {leftIcon !== undefined && (<TouchableOpacity 
                     onPress={onLeftIconClick !== undefined ? onLeftIconClick : () => {}}

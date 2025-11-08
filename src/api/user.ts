@@ -18,10 +18,7 @@ export type UploadUserPayload = {
     gender?: string | null;
 }
 
-export const updateUser = async (payload: UploadUserPayload, userId?: number) => {
-    console.log("payload", payload)
-    console.log("userId", userId)
-    
+export const updateUser = async (payload: UploadUserPayload, userId?: number) => {    
     if(userId !== undefined && payload !== undefined) {
         let user = users.filter((u: UsersProps) => u.id === userId)[0];
         if(user && user.age === null && payload && payload.age) user["age"] = payload.age;

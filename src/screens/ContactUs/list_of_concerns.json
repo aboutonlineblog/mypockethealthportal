@@ -14,7 +14,7 @@
         "label": "Feature Request"
     },
     {
-        "id": "help",
+        "id": "support",
         "type": "need help (support)",
         "error_message": "Unable to send support request at this moment due to connection error. Please try again later.",
         "success_message": "Thank you for reaching out! We’ve received your support request and our team will get back to you as soon as possible. We appreciate your patience and will do our best to help you quickly.",

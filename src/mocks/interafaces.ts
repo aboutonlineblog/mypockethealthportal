@@ -14,3 +14,24 @@ export interface UsersProps {
     height_unit_type: string | null;
     gender: string | null;
 }
+
+export interface ContactsProps {
+    id: number;
+    created_at: number;
+    updated_at: number;
+    message: string;
+    type: string;
+    handled_by: string | number | null;
+    user_id: string | number;
+}
+
+export interface ContactsRepliesProps {
+    id: number;
+    created_at: number;
+    updated_at: number;
+    message: string;
+    type: string;
+    handled_by: string | number | null;
+    case_id: 0;
+    user_id: string | number;
+}

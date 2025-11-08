@@ -40,8 +40,11 @@ export const useGlobalStyles = () => {
         },
 
         /** SPACES */
-        mVSpace20: {
+        mHSpace20: {
             marginHorizontal: 20
+        },
+        mVSpace20: {
+            marginVertical: 20
         },
         mRightSpace20: {
             marginRight: 20
@@ -117,6 +120,34 @@ export const useGlobalStyles = () => {
             color: Colors.link_color,
             textDecorationLine: 'underline',
             fontWeight: 'bold'
-        }
+        },
+
+        /** TEXTAREA */
+        textAreaNormal: {
+            width: "100%",
+            height: INPUT_HEIGHT * 4,
+            borderRadius: 10,
+            borderWidth: 1,
+            textAlignVertical: "top",
+            padding: 10
+        },
+        textAreaMedium: {
+            width: "100%",
+            height: INPUT_HEIGHT * 6,
+            borderRadius: 10,
+            borderWidth: 1,
+            textAlignVertical: "top",
+            padding: 10
+        },
+
+        /** FORM */
+        formWrapper: {
+            marginVertical: 15
+        },
+        formLabel: {
+            marginBottom: 5,
+            color: Colors.tab_bg_color,
+            fontWeight: "bold"
+        },
     })
 }
