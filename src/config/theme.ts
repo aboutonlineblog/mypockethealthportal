@@ -15,5 +15,6 @@ export const Colors = {
     black: "#000000",
     active_radio_button: "#82c4faff",
     placeholderColor: "#b3b3b3",
-    dark_gray: "#969997"
+    dark_gray: "#969997",
+    light_color: "#e0e0e0"
 }

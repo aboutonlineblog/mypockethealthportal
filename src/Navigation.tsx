@@ -15,6 +15,7 @@ import PrivacyPolicyScreen from "@/screens/PrivacyPolicy";
 import CreateAccountScreen from "@/screens/CreateAccount";
 import OnBoardingScreen from "@/screens/OnBoarding";
 import ManageAccountScreen from "@/screens/ManageAccount";
+import EditProfileScreen from "@/screens/AccountProfile/EditProfile";
 
 /** SUB SCREEN */
 import FastingTrackerHistoryScreen from "@/screens/FastingTracker/FastingHistory";
@@ -77,6 +78,10 @@ const RootStack = createNativeStackNavigator({
         AccountProfile: {
             screen: AccountProfileScreen,
             options: ScreenOptions("Account Profile"),
+        },
+        EditProfile: {
+            screen: EditProfileScreen,
+            options: ScreenOptions("Update Profile"),
         },
         ManageAccount: {
             screen: ManageAccountScreen,
