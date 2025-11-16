@@ -14,11 +14,15 @@ export const useOnBoarding = () => {
 
     const [currentOnBoardingPage, setCurrentOnBoardingPage] = useState<number>(0);
     const [currentAge, setCurrentAge] = useState<number>(0);
+    const [birthdate, setBirthdate] = useState<string | null>(null);
     const [savingChanges, setSavingChanges] = useState<boolean>(false);
-    console.log("route.params", route.params)
+
     const mutateAge = useMutation({
         mutationFn: async ({currentAge, userId}: MutationProps) => {
-            return await updateUser({age: currentAge}, userId);
+            return await updateUser({
+                age: currentAge,
+                birthdate
+            }, userId);
         },
         onSuccess: (data) => {
             queryClient.setQueryData([`CURRENT_USER_LOGIN_${route.params?.user?.id}`], data)
@@ -84,8 +88,9 @@ export const useOnBoarding = () => {
         );
     }
 
-    const _onGetAge = ({age}: OnBoardingOnChangeProps) => {
+    const _onGetAge = ({age, birthdate}: OnBoardingOnChangeProps) => {
         setCurrentAge(age);
+        setBirthdate(`${birthdate.year}-${birthdate.month}-${birthdate.day}`)
     }
 
     return {

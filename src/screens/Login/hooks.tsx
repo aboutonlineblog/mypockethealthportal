@@ -6,6 +6,8 @@ import {loginApi} from "@/api/login";
 import {LoginNavigationProps} from "./interafaces";
 import {UsersProps} from "@/mocks/interafaces";
 import {TextInput} from "react-native";
+import {updateState} from "@/helpers/GlobalState";
+import {useQueryClient} from "@tanstack/react-query";
 
 type LoginParams = {
     e: string;
@@ -14,6 +16,7 @@ type LoginParams = {
 
 export const useLoginHooks = () => {
     /** HOOKS */
+    const queryClient = useQueryClient();
     const navigation = useNavigation<NavigationProp<LoginNavigationProps>>();
 
     /** STATES */
@@ -30,7 +33,9 @@ export const useLoginHooks = () => {
             const user: UsersProps = await loginApi(e, p);
             return user;
         },
-        onSuccess: (data, variables, context) => {
+        onSuccess: (data) => {
+            updateState("currentLoginUser", data, false);
+            queryClient.setQueryData([`CURRENT_LOGIN_USER_${data?.id}`, {id: data?.id}], data);
             if(data.age === null) {
                 navigation.dispatch(
                     CommonActions.reset({

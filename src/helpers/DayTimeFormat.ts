@@ -145,3 +145,16 @@ export const getAge = (birthDate: string) => {
 
     return age;
 }
+
+export const convertToReadableDateFormat = (date: string) => {
+    if(date === '' || !date) {
+        return '';
+    }
+
+    const splitDate = date.split("-");
+    const year = splitDate[0];
+    const month = splitDate[1];
+    const day = splitDate[2];
+
+    return `${MonthsArr.filter(m => m.label === month)[0].name} ${DaysArray.filter(m => m.label === day)[0].name}, ${Number(year)}`
+}

@@ -2,6 +2,8 @@ import React from "react";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '@/config/theme';
+import {useRoute, RouteProp} from "@react-navigation/native";
+import {UserDataTypes} from "./interfaces";
 
 /** TABS */
 import AppsTab from "./Tabs/AppsTab";
@@ -57,6 +59,9 @@ const tabOptions = (tabName: string) => {
 };
 
 const Dashboard = () => {
+    // const route = useRoute<RouteProp<UserDataTypes>>();
+    // console.log("route", route.params.user)
+
     return (
         <Tab.Navigator
             screenOptions={{

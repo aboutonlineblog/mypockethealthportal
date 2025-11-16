@@ -1,12 +1,15 @@
 import React from "react";
-import {View, Text, FlatList} from "react-native";
+import {View, TouchableOpacity, FlatList} from "react-native";
 import {useStyles} from "./index.styles";
 import {ProfileSectionsProps, RenderProfileSectionProps} from "./interfaces";
 import UserAvatar from "./ProfileItems/UserAvatar";
 import UserStats from "./ProfileItems/UserStats";
 
+import {useAccountProfile} from "./hooks";
+
 const AccountProfile = () => {
     const Styles = useStyles();
+    const {} = useAccountProfile(Styles);
     const sections = [
         {id: "user_avatar", component: () => <UserAvatar />},
         {id: "user_stats", component: () => <UserStats />}

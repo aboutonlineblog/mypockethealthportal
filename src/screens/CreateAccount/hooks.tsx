@@ -9,6 +9,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {validations} from "@/helpers/Validations";
 import {TextInput} from "react-native";
 import {useMutation} from "@tanstack/react-query";
+import {updateState} from "@/helpers/GlobalState";
 
 export const useCreateAccount = () => {
     /** HOOKS */
@@ -69,7 +70,8 @@ export const useCreateAccount = () => {
                 )
             } else {
                 if(data && data.payload && data.payload.id) {
-                    queryClient.setQueryData([`CURRENT_LOGIN_USER_${data?.payload?.id}`], data.payload);
+                    updateState("currentLoginUser", data?.payload, false);
+                    queryClient.setQueryData([`CURRENT_LOGIN_USER_${data?.payload?.id}`, {id: data?.payload?.id}], data?.payload);
                 }
             }
         },

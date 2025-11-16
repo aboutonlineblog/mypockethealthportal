@@ -15,10 +15,10 @@ import PrivacyPolicyScreen from "@/screens/PrivacyPolicy";
 import CreateAccountScreen from "@/screens/CreateAccount";
 import OnBoardingScreen from "@/screens/OnBoarding";
 import ManageAccountScreen from "@/screens/ManageAccount";
-import EditProfileScreen from "@/screens/AccountProfile/EditProfile";
 
 /** SUB SCREEN */
 import FastingTrackerHistoryScreen from "@/screens/FastingTracker/FastingHistory";
+import EditProfileScreen from "@/screens/AccountProfile/EditProfile";
 
 /** CONFIG */
 import {Colors} from "@/config/theme";

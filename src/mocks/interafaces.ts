@@ -13,6 +13,8 @@ export interface UsersProps {
     weight_unit_type: string | null;
     height_unit_type: string | null;
     gender: string | null;
+    avatar: string;
+    birthdate: string | null;
 }
 
 export interface ContactsProps {

@@ -78,7 +78,8 @@ export const useStyles = () => {
         },
         formLabel: {
             fontWeight: 'bold',
-            marginLeft: 17
+            marginLeft: 17,
+            color: Colors.black
         },
         inputWrapper: {
             flexDirection: 'row',

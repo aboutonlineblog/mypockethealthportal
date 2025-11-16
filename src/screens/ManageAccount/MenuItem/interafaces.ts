@@ -4,6 +4,7 @@ export type MenuRenderItemProps = {
     description: string;
     route: string | null;
     icon: string | null;
+    from: string;
 }
 
 export type MenuRenderProps = {
