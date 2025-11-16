@@ -16,7 +16,10 @@ export const users: Array<UsersProps> = [
         height: 170,
         height_unit_type: "cm",
         gender: "male",
-        avatar: "https://shapes.inc/api/public/avatar/avataraang-9d8p",
+        avatar: {
+            string_value: "N",
+            color: "#95ff6eff"
+        },
         birthdate: "1988-01-14" //<<-- yyyy-mm-dd
     },
     {
