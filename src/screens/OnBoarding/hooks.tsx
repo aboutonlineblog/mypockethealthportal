@@ -18,10 +18,10 @@ export const useOnBoarding = () => {
     const [savingChanges, setSavingChanges] = useState<boolean>(false);
 
     const mutateAge = useMutation({
-        mutationFn: async ({currentAge, userId}: MutationProps) => {
+        mutationFn: async ({currentAge, userId, bdate}: MutationProps) => {
             return await updateUser({
                 age: currentAge,
-                birthdate
+                birthdate: bdate
             }, userId);
         },
         onSuccess: (data) => {
@@ -50,7 +50,11 @@ export const useOnBoarding = () => {
         } else {
             setSavingChanges(true);
             if(route.params?.user?.id) {
-                mutateAge.mutate({currentAge, userId: route.params?.user?.id})
+                mutateAge.mutate({
+                    currentAge, 
+                    bdate: birthdate,
+                    userId: route.params?.user?.id
+                })
             } else {
                Alert.alert(
                     "Unauthorized Access",

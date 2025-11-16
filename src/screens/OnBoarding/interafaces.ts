@@ -31,4 +31,5 @@ export type OnBoardingParamListBase = {
 export type MutationProps = {
     currentAge: number;
     userId: number;
+    bdate: string | null;
 }

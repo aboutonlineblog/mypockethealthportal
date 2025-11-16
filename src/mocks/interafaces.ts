@@ -13,7 +13,10 @@ export interface UsersProps {
     weight_unit_type: string | null;
     height_unit_type: string | null;
     gender: string | null;
-    avatar: string;
+    avatar: string | {
+        color: string;
+        string_value: string,
+    };
     birthdate: string | null;
 }
 

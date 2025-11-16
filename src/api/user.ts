@@ -17,7 +17,11 @@ export type UploadUserPayload = {
     weight_unit_type?: string | null;
     height_unit_type?: string | null;
     gender?: string | null;
-    birthdate: string | null;
+    birthdate?: string | null;
+    avatar?: string | {
+        color: string;
+        string_value: string,
+    };
 }
 
 export const updateUser = async (payload: UploadUserPayload, userId?: number) => {    
