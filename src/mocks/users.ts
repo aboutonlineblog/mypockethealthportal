@@ -41,7 +41,7 @@ export const users: Array<UsersProps> = [
         birthdate: "1988-01-14" //<<-- yyyy-mm-dd
     },
     {
-        id: 1,
+        id: 2,
         first_name: "ekker",
         last_name: "pumanes",
         full_name: "ekker gwapo",
@@ -57,5 +57,26 @@ export const users: Array<UsersProps> = [
         gender: "male",
         avatar: "https://shapes.inc/api/public/avatar/avataraang-9d8p",
         birthdate: "1988-01-14" //<<-- yyyy-mm-dd
-    }
+    },
+    {
+        id: 3,
+        first_name: "John",
+        last_name: "Dough",
+        full_name: "John Dough",
+        premium_member: false,
+        admin: false,
+        email: "johndough@yopmail.com",
+        password: "letmein", //<-- will be hashed in the backend
+        age: 37,
+        weight: 84,
+        weight_unit_type: "kg",
+        height: 170,
+        height_unit_type: "cm",
+        gender: "male",
+        avatar: {
+            string_value: "J",
+            color: "#003eb1ff"
+        },
+        birthdate: "1988-01-14" //<<-- yyyy-mm-dd
+    },
 ]

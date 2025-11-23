@@ -20,7 +20,7 @@ export const useLoginHooks = () => {
     const navigation = useNavigation<NavigationProp<LoginNavigationProps>>();
 
     /** STATES */
-    const [email, setEmail] = useState<string>("neil@gmail.com");
+    const [email, setEmail] = useState<string>("johndough@yopmail.com");
     const [password, setPassword] = useState<string>("letmein");
     const [securePassword, setSecurePassword] = useState<boolean>(true);
 

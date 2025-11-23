@@ -52,6 +52,9 @@ export const useGlobalStyles = () => {
         mLeftSpace20: {
             marginLeft: 20
         },
+        verticalFullSpacer: {
+            flex: 1
+        },
 
         /** CONTAINERS */
         emptyDataContainer: {

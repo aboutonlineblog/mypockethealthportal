@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from "react-native";
+import {StyleSheet, Dimensions, ViewStyle} from "react-native";
 import {Colors} from "@/config/theme";
 
 const {height, width} = Dimensions.get("window");
@@ -26,6 +26,11 @@ export const useStyles = () => {
             width: width * 0.3,
             height: width * 0.3,
         },
+        avatarChar: {
+            fontWeight: "bold",
+            fontSize: (width * 0.3) * 0.5,
+            color: "#fff"
+        },
         name: {
             marginTop: 10,
             fontWeight: "bold",
@@ -47,3 +52,7 @@ export const useStyles = () => {
         }
     })
 }
+
+export const randomBGColor = (backgroundColor: string): ViewStyle => ({
+    backgroundColor
+});

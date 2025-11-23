@@ -5,17 +5,19 @@ import {useGlobalStyles} from "@/config/globalStyles.styles";
 import {useEditProfile} from "./hooks";
 import Button from "@/modules/Button";
 import {convertToReadableDateFormat} from "@/helpers/DayTimeFormat";
+import UserAvatar from "../ProfileItems/UserAvatar";
 
 const EditProfile = () => {
     const Styles = useStyles();
     const GlobalStyles = useGlobalStyles();
     const {
         fNameRef, lNameRef, fname, lname, height, weight, gender, birthdate,
-        _onChangeInputValue, _onNextInput
+        _onChangeInputValue, _onNextInput, avatar
     } = useEditProfile();
 
     return (
         <View style={Styles.container}>
+            <UserAvatar edit={true} avatar={avatar} />
             <View style={GlobalStyles.inputWrapper}>
                 <Text style={Styles.formLabel}>First Name</Text>
                 <TextInput 
@@ -115,6 +117,7 @@ const EditProfile = () => {
                     onSubmitEditing={() => _onNextInput("birthdate")}
                 />
             </View>
+            <View style={GlobalStyles.verticalFullSpacer} />
             <Button label="Submit" onPress={() => {}} />
         </View>
     )

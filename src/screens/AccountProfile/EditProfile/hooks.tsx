@@ -74,6 +74,6 @@ export const useEditProfile = () => {
 
     return {
         fNameRef, lNameRef, fname, lname, height, weight, gender, birthdate,
-        setFirstName, _onChangeInputValue, _onNextInput
+        setFirstName, _onChangeInputValue, _onNextInput, avatar: userInfo?.avatar
     }
 }

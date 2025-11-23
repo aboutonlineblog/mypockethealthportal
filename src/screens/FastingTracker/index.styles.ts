@@ -37,7 +37,7 @@ export const useStyles = () => {
             marginTop: 20,
             width: width * 0.35,
             height: 50,
-            backgroundColor: Colors.tab_active_color,
+            backgroundColor: Colors.tab_bg_color,
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: (width * 0.35) / 2
@@ -82,7 +82,7 @@ export const useStyles = () => {
         timeLabel: {
             fontSize: 18,
             fontWeight: 'bold',
-            color: Colors.tab_active_color
+            color: Colors.tab_bg_color
         },
         goalLabel: {
             fontWeight: 'bold',
@@ -114,14 +114,14 @@ export const useStyles = () => {
             borderRadius: ((height * 0.07) * 1.1) / 2,
             borderWidth: 5,
             backgroundColor: Colors.screen_background,
-            borderColor: Colors.tab_active_color,
+            borderColor: Colors.tab_bg_color,
             justifyContent: 'center',
             alignItems: 'center',
         },
         bgDecor: {
             height: ((height * 0.07) * 1.1) * 0.7,
             width: ((height * 0.07) * 1.1) * 2.75,
-            backgroundColor: Colors.tab_active_color,
+            backgroundColor: Colors.tab_bg_color,
             position: 'absolute',
             zIndex: 0
         },

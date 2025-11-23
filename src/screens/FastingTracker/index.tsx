@@ -81,17 +81,17 @@ const FastingTracker = ({navigation}: any) => {
                             <View style={Styles.bgDecor} />
                             <View style={Styles.actionBtns}>
                                 <TouchableOpacity style={Styles.actBtn} activeOpacity={1} onPress={_onNavigateToHistory}>
-                                    <Icon name="newspaper-sharp" size={Styles.actBtn.width * 0.5} color={Colors.tab_active_color} />
+                                    <Icon name="newspaper-sharp" size={Styles.actBtn.width * 0.5} color={Colors.tab_bg_color} />
                                 </TouchableOpacity>
                             </View>
                             <View style={Styles.actionBtns}>
                                 <TouchableOpacity style={Styles.actBtn} activeOpacity={1}>
-                                    <Icon name="stats-chart" size={Styles.actBtn.width * 0.5} color={Colors.tab_active_color} />
+                                    <Icon name="stats-chart" size={Styles.actBtn.width * 0.5} color={Colors.tab_bg_color} />
                                 </TouchableOpacity>
                             </View>
                             <View style={Styles.actionBtns}>
                                 <TouchableOpacity style={Styles.actBtn} activeOpacity={1}>
-                                    <Icon name="pencil" size={Styles.actBtn.width * 0.5} color={Colors.tab_active_color} />
+                                    <Icon name="pencil" size={Styles.actBtn.width * 0.5} color={Colors.tab_bg_color} />
                                 </TouchableOpacity>
                             </View>
                         </View>

@@ -25,7 +25,7 @@ const Login = () => {
     const GlobalStyles = useGlobalStyles();
     const {
         _onGoogleLogin, _onLogin, _onChangeInputValue, _onGoToCreateAccount, securePassword,
-        emailInputRef, passwordInputRef, _onNextInput, setSecurePassword
+        emailInputRef, passwordInputRef, _onNextInput, setSecurePassword, email, password
     } = useLoginHooks();
 
     return (
@@ -52,6 +52,7 @@ const Login = () => {
                                 style={[GlobalStyles.input, Styles.input]} 
                                 placeholder="Enter email address" 
                                 placeholderTextColor="#b5b5b5"
+                                value={email}
                                 onChangeText={(val: string) => _onChangeInputValue(val, 'email')}
                                 returnKeyType="next"
                                 onSubmitEditing={() => _onNextInput("password")} />
@@ -66,6 +67,7 @@ const Login = () => {
                                     placeholderTextColor="#b5b5b5"
                                     secureTextEntry={securePassword}
                                     autoCapitalize="none"
+                                    value={password}
                                     onChangeText={(val: string) => _onChangeInputValue(val, 'password')}
                                     returnKeyType="go"
                                     onSubmitEditing={_onLogin} 

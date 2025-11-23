@@ -20,3 +20,12 @@ export type UpdateProfileNavProps = {
         user: UsersProps
     } | undefined;
 };
+
+export interface UserAvatarProps {
+    edit?: boolean;
+    avatar?: string | {
+        color: string;
+        string_value: string,
+    };
+    fullname?: string | null;
+}
