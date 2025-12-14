@@ -1,11 +1,30 @@
 import React, {useState, useRef, useEffect, useMemo} from "react";
-import {Alert} from "react-native";
+import {Alert, Linking, Platform} from "react-native";
 import _ from "underscore";
 import {useQueryClient, useInfiniteQuery} from "@tanstack/react-query";
 import {useNavigation, NavigationProp} from '@react-navigation/native';
 import {FastingTrackerSubNavi} from "./interafaces";
 import {getTotalSeconds} from "@/helpers/DayTimeFormat";
 import {getFastingHistory} from "@/api/fasting";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackgroundService from 'react-native-background-actions';
+import {requestNotificationPermission} from "@/helpers/Permissions";
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+const fastingService = async (startTime: any) => {
+    while (BackgroundService.isRunning()) {
+        const elapsed = Date.now() - startTime;
+        const hours = Math.floor(elapsed / 3600000);
+        const minutes = Math.floor((elapsed % 3600000) / 60000);
+
+        await BackgroundService.updateNotification({
+            taskDesc: `Fasting ${hours}h ${minutes}m`,
+        });
+
+        await sleep(60000); // update every minute (recommended)
+    }
+};
 
 export const useFastingTrackerHooks = () => {
     /** HOOKS */
@@ -59,6 +78,8 @@ export const useFastingTrackerHooks = () => {
                     'You have completed your fasting goal! Keep it up.',
                     [
                         {text: "Got it", onPress: async () => {
+                            await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
+                            await BackgroundService.stop();
                             await updateFastingData(eDate);
                         }, style: 'cancel'},
                     ]
@@ -147,6 +168,38 @@ export const useFastingTrackerHooks = () => {
     }
 
     const _onStartFasting = async () => {
+        const allowed = await requestNotificationPermission();
+
+        if(allowed !== undefined && allowed === false) {
+            Alert.alert(
+                'Enable notifications to continue',
+                'Fasting tracking uses notifications to display elapsed time while the app is closed. Please enable notifications to proceed.\n\nSettings → App info → Notifications → Allow',
+                [
+                    {text: 'Cancel', onPress: () => {}},
+                    {text: 'Enable', onPress: async () => {
+                        if (Platform.OS !== 'android') return;
+
+                        try {
+                            await Linking.openURL('package:' + 'com.mypockethealthportal');
+                        } catch (e1) {
+                            console.log("error1", e1)
+                            try {
+                                await Linking.openURL('android.settings.APP_NOTIFICATION_SETTINGS');
+                            } catch (e2) {
+                                console.log("error2", e2)
+                                try {
+                                    await Linking.openSettings();
+                                } catch (e3) {
+                                    console.log("error3", e3)
+                                }
+                            }
+                        }
+                    }}
+                ]
+            )
+            return;
+        }
+
         if(goal === 0) {
             Alert.alert(
                 'Wait!',
@@ -163,6 +216,27 @@ export const useFastingTrackerHooks = () => {
         if(startFasting === false) {
             await restart();
             setStartFasting(true);
+
+            const start_time = Date.now();
+            const currentFastingTime = await AsyncStorage.getItem("CURRENT_ACTIVE_FASTING_TIME");
+
+            if(!currentFastingTime) {
+                await AsyncStorage.setItem("CURRENT_ACTIVE_FASTING_TIME", JSON.stringify({start_time}));
+            }
+
+            await BackgroundService.start(
+                () => fastingService(start_time),
+                {
+                taskName: 'Fasting Tracker',
+                taskTitle: 'Fasting in progress',
+                taskDesc: 'Starting...',
+                taskIcon: {
+                    name: 'ic_launcher',
+                    type: 'mipmap',
+                },
+                color: '#4CAF50',
+                }
+            );
 
             timerInterval.current = setInterval(() => {
                 setTotalSecondsElapsed((prevSec) => {
@@ -211,6 +285,7 @@ export const useFastingTrackerHooks = () => {
             setStartDate(sDate);
             await createFastingData(sDate);
         } else {
+            await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
             setStartFasting(false);
             clearInterval(timerInterval.current);
 
