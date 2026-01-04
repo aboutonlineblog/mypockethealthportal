@@ -13,11 +13,13 @@ export const useGlobalStyles = () => {
             width: INPUT_WIDTH,
             height: INPUT_HEIGHT,
             borderRadius: INPUT_WIDTH / 2,
-            borderWidth: 1
+            borderWidth: 1,
+            color: Colors.black
         },
         inputWithIcon: {
             width: INPUT_WIDTH * 0.81,
             height: INPUT_HEIGHT,
+            color: Colors.black
         },
         inputWrapper: {
             marginVertical: 5

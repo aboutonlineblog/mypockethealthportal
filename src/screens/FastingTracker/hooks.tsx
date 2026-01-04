@@ -13,16 +13,24 @@ import {requestNotificationPermission} from "@/helpers/Permissions";
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const fastingService = async (startTime: any) => {
+    let elapsed = Date.now() - startTime;
+    let hours = Math.floor(elapsed / 3600000);
+    let minutes = Math.floor((elapsed % 3600000) / 60000);
+
+    await BackgroundService.updateNotification({
+        taskDesc: `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`,
+    });
+
     while (BackgroundService.isRunning()) {
-        const elapsed = Date.now() - startTime;
-        const hours = Math.floor(elapsed / 3600000);
-        const minutes = Math.floor((elapsed % 3600000) / 60000);
+        elapsed = Date.now() - startTime;
+        hours = Math.floor(elapsed / 3600000);
+        minutes = Math.floor((elapsed % 3600000) / 60000);
 
         await BackgroundService.updateNotification({
-            taskDesc: `Fasting ${hours}h ${minutes}m`,
+            taskDesc: `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`,
         });
 
-        await sleep(60000); // update every minute (recommended)
+        await sleep(10000); // update every minute (recommended)
     }
 };
 
@@ -62,10 +70,143 @@ export const useFastingTrackerHooks = () => {
     /** VARIABLES */
     const totalSecondsToComplete: number = getTotalSeconds(goalTimeType, goal);
     const timeProgress = totalSecondsElapsed > 0 && totalSecondsToComplete > 0 ? Math.round((totalSecondsElapsed / totalSecondsToComplete) * 100) : 0;
-    const timeRemaining = 100 - timeProgress;
+    const tr = 100 - timeProgress;
+    const timeRemaining = tr > 0 ? tr : 0;
+
+    const runTimer = () => {
+        timerInterval.current = setInterval(() => {
+            setTotalSecondsElapsed((prevSec) => {
+                const currSec = prevSec += 1;
+                return currSec;
+            });
+
+            setSeconds((prevSec: number) => {
+                const currSec = prevSec += 1;
+
+                if (currSec < 60) {
+                    return currSec;
+                }
+
+                setMinutes((prevMin: number) => {
+                    const currMin = prevMin += 1;
+
+                    if (currMin < 60) {
+                        return currMin;
+                    }
+
+                    setHours((prevHr: number) => {
+                        const currHr = prevHr += 1;
+
+                        if (currHr < 24) {
+                            return currHr;
+                        }
+
+                        setDays((prevDays: number) => {
+                            const currDay = prevDays += 1;
+
+                            return currDay;
+                        })
+
+                        return 0;
+                    })
+
+                    return 0;
+                })
+
+                return 0
+            });
+        }, 1000);
+    }
 
     /** REACT HOOKS */
     useEffect(() => {
+        /** ON MOUNT, AUTO START IF THERE IS A BACKGROUND TIMER RUNNING */
+        AsyncStorage.getItem("CURRENT_ACTIVE_FASTING_TIME").then((currentFastingTime: string | null) => {
+            if(currentFastingTime) {
+                const {start_time, goal_val, goal_time_type} = JSON.parse(currentFastingTime);
+                let now = Date.now();  
+                let diffMs = now - start_time;
+                let secondsPassed = Math.floor(diffMs / 1000);
+                let minutesPassed = Math.floor(diffMs / (1000 * 60));
+                let hoursPassed   = Math.floor(diffMs / (1000 * 60 * 60));
+                let daysPassed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                let currentSeconds = Math.floor(diffMs / 1000) % 60;
+                
+                let alignInterval = 1;
+                let alignIntervalTimer: any = null;
+
+                /** UPDATE IMMEDIATELY */
+                setGoal(goal_val);
+                setGoalTimeType(goal_time_type);
+                setTotalSecondsElapsed(() => secondsPassed);
+                setSeconds(() => currentSeconds);
+                setMinutes(() => minutesPassed);
+                setHours(() => hoursPassed);
+                setDays(() => daysPassed);
+
+                /** ALIGN THE VALUE TO THE BACKGROUND TIMER */
+                alignIntervalTimer = setInterval(() => {
+                    if(alignInterval >= 2 && alignIntervalTimer) clearInterval(alignIntervalTimer) 
+                    
+                    now = Date.now();  
+                    diffMs = now - start_time;
+                    secondsPassed = Math.floor(diffMs / 1000);
+                    minutesPassed = Math.floor(diffMs / (1000 * 60));
+                    hoursPassed   = Math.floor(diffMs / (1000 * 60 * 60));
+                    daysPassed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                    currentSeconds = Math.floor(diffMs / 1000) % 60;
+
+                    setTotalSecondsElapsed(() => secondsPassed);
+                    setSeconds(() => currentSeconds);
+                    setMinutes(() => minutesPassed);
+                    setHours(() => hoursPassed);
+                    setDays(() => daysPassed);
+
+                    alignInterval += 1;
+                }, 10000)
+
+                setStartFasting(true);
+                runTimer();
+            }
+        });
+
+        return () => {
+            if(timerInterval.current) clearInterval(timerInterval.current)
+        }
+    }, [])
+
+    useEffect(() => {
+        if(timeRemaining < 1) {
+            clearInterval(timerInterval.current);
+                const eDate = new Date();
+
+            setEndDate((prevState) => {
+                if(!prevState) return eDate;
+
+                return prevState;
+            });
+
+            setStartFasting((prevState) => {
+                if(prevState === true) return false;
+
+                return prevState;
+            });
+
+            Alert.alert(
+                'Awesome!',
+                'You have completed your fasting goal! Keep it up.',
+                [
+                    {text: "Got it", onPress: async () => {
+                        await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
+                        await BackgroundService.stop();
+                        await updateFastingData(eDate);
+                    }, style: 'cancel'},
+                ]
+            );
+
+            return;
+        }
+
         if(startDate !== null && totalSecondsElapsed > 0) {
             if(totalSecondsElapsed === totalSecondsToComplete) {
                 clearInterval(timerInterval.current);
@@ -84,10 +225,11 @@ export const useFastingTrackerHooks = () => {
                         }, style: 'cancel'},
                     ]
                 );
+
+                return;
             }
-            
         }
-    }, [startDate, totalSecondsElapsed])
+    }, [startDate, totalSecondsElapsed, totalSecondsToComplete])
 
     /** FUNCTIONS */
     const restart = () => {
@@ -218,11 +360,10 @@ export const useFastingTrackerHooks = () => {
             setStartFasting(true);
 
             const start_time = Date.now();
-            const currentFastingTime = await AsyncStorage.getItem("CURRENT_ACTIVE_FASTING_TIME");
 
-            if(!currentFastingTime) {
-                await AsyncStorage.setItem("CURRENT_ACTIVE_FASTING_TIME", JSON.stringify({start_time}));
-            }
+            await AsyncStorage.setItem("CURRENT_ACTIVE_FASTING_TIME", JSON.stringify({
+                start_time, goal_val: goal, goal_time_type: goalTimeType
+            }));
 
             await BackgroundService.start(
                 () => fastingService(start_time),
@@ -238,53 +379,13 @@ export const useFastingTrackerHooks = () => {
                 }
             );
 
-            timerInterval.current = setInterval(() => {
-                setTotalSecondsElapsed((prevSec) => {
-                    const currSec = prevSec += 1;
-                    return currSec;
-                });
-
-                setSeconds((prevSec: number) => {
-                    const currSec = prevSec += 1;
-
-                    if (currSec < 60) {
-                        return currSec;
-                    }
-
-                    setMinutes((prevMin: number) => {
-                        const currMin = prevMin += 1;
-
-                        if (currMin < 60) {
-                            return currMin;
-                        }
-
-                         setHours((prevHr: number) => {
-                            const currHr = prevHr += 1;
-
-                            if (currHr < 24) {
-                                return currHr;
-                            }
-
-                            setDays((prevDays: number) => {
-                                const currDay = prevDays += 1;
-
-                                return currDay;
-                            })
-
-                            return 0;
-                        })
-
-                        return 0;
-                    })
-
-                    return 0
-                });
-            }, 1000);
+            runTimer();
 
             const sDate = new Date();
             setStartDate(sDate);
             await createFastingData(sDate);
         } else {
+            await BackgroundService.stop();
             await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
             setStartFasting(false);
             clearInterval(timerInterval.current);
