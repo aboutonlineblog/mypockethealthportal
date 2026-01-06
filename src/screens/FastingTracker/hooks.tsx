@@ -10,6 +10,48 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundService from 'react-native-background-actions';
 import {requestNotificationPermission} from "@/helpers/Permissions";
 
+let bgTimerShouldStopFlag = false;
+let stopResolver: (() => void) | null = null;
+
+const waitForStop = () =>
+  new Promise<void>(resolve => {
+    stopResolver = resolve;
+  });
+
+const cancellableSleep = (ms: number) =>
+  Promise.race([
+    new Promise(res => setTimeout(res, ms)),
+    waitForStop(),
+  ]);
+
+const fastingService = async (taskDataArguments: any) => {
+    const {startTime} = taskDataArguments;
+
+    /** WHILE LOOP HAS TO FAIL IN ORDER TO RESET THE TIMER
+     *  THUS THE REF FLAG IS NEEDED
+     */
+    while (BackgroundService.isRunning() && !bgTimerShouldStopFlag) {            
+        let elapsed = Date.now() - startTime;
+        let hours = Math.floor(elapsed / 3600000);
+        let minutes = Math.floor((elapsed % 3600000) / 60000);
+
+        await BackgroundService.updateNotification({
+            taskDesc: `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`,
+        });
+
+        /** REDUCE SLEEP SO THE BACKGROUND TASK CAN RESET FAST */
+        await cancellableSleep(30000);
+    }
+};
+
+const stopFastingService = async () => {
+    bgTimerShouldStopFlag = true;
+    stopResolver?.(); // 🔥 interrupts sleep immediately
+    stopResolver = null;
+
+    await BackgroundService.stop();
+};
+
 export const useFastingTrackerHooks = () => {
     /** HOOKS */
     const navigation = useNavigation<NavigationProp<FastingTrackerSubNavi>>();
@@ -49,8 +91,6 @@ export const useFastingTrackerHooks = () => {
     const timeProgress = totalSecondsElapsed > 0 && totalSecondsToComplete > 0 ? Math.round((totalSecondsElapsed / totalSecondsToComplete) * 100) : 0;
     const tr = 100 - timeProgress;
     const timeRemaining = tr > 0 ? tr : 0;
-
-    let bgTimerShouldStopFlag = false;
 
     const runTimer = () => {
         timerInterval.current = setInterval(() => {
@@ -108,6 +148,9 @@ export const useFastingTrackerHooks = () => {
                 let hoursPassed   = Math.floor(diffMs / (1000 * 60 * 60)) % 24;
                 let daysPassed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
                 let currentSeconds = Math.floor(diffMs / 1000) % 60;
+
+                let hours = Math.floor(diffMs / 3600000);
+                let minutes = Math.floor((diffMs % 3600000) / 60000);
                 
                 let alignInterval = 1;
                 let alignIntervalTimer: any = null;
@@ -116,10 +159,10 @@ export const useFastingTrackerHooks = () => {
                 setGoal(goal_val);
                 setGoalTimeType(goal_time_type);
                 setTotalSecondsElapsed(() => secondsPassed);
-                setSeconds(() => currentSeconds);
-                setMinutes(() => minutesPassed);
-                setHours(() => hoursPassed);
-                setDays(() => daysPassed);
+                setSeconds(currentSeconds);
+                setMinutes(minutes);
+                setHours(hours);
+                setDays(daysPassed);
 
                 /** ALIGN THE VALUE TO THE BACKGROUND TIMER */
                 alignIntervalTimer = setInterval(() => {
@@ -196,7 +239,7 @@ export const useFastingTrackerHooks = () => {
                 'You have completed your fasting goal! Keep it up.',
                 [
                     {text: "Got it", onPress: async () => {
-                        bgTimerShouldStopFlag = true;
+                        stopFastingService();
                         await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
                         await BackgroundService.stop();
                         await updateFastingData(eDate);
@@ -219,7 +262,7 @@ export const useFastingTrackerHooks = () => {
                     'You have completed your fasting goal! Keep it up.',
                     [
                         {text: "Got it", onPress: async () => {
-                            bgTimerShouldStopFlag = true;
+                            stopFastingService();
                             await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
                             await BackgroundService.stop();
                             await updateFastingData(eDate);
@@ -310,28 +353,6 @@ export const useFastingTrackerHooks = () => {
 
     }
 
-    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-    const fastingService = async (taskDataArguments: any) => {
-        const {startTime} = taskDataArguments;
-
-        /** WHILE LOOP HAS TO FAIL IN ORDER TO RESET THE TIMER
-         *  THUS THE REF FLAG IS NEEDED
-         */
-        while (BackgroundService.isRunning() && !bgTimerShouldStopFlag) {            
-            let elapsed = Date.now() - startTime;
-            let hours = Math.floor(elapsed / 3600000);
-            let minutes = Math.floor((elapsed % 3600000) / 60000);
-
-            await BackgroundService.updateNotification({
-                taskDesc: `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`,
-            });
-
-            /** REDUDE SLEEP SO THE BACKGROUND TASK CAN RESET FAST */
-            await sleep(1000);
-        }
-    };
-
     const _onStartFasting = async () => {
         const allowed = await requestNotificationPermission();
 
@@ -413,7 +434,7 @@ export const useFastingTrackerHooks = () => {
             setStartDate(sDate);
             await createFastingData(sDate);
         } else {
-            bgTimerShouldStopFlag = true;
+            stopFastingService();
             await BackgroundService.stop();
             await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
             setStartFasting(false);

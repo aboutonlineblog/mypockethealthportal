@@ -46,16 +46,16 @@ const FastingTracker = ({navigation}: any) => {
                             {days < 1 ? (<Text style={Styles.timerLabel}>
                                 <Text style={Styles.timeElapsedLabel}>{`elapsed time (${timeProgress}%)`}</Text>{'\n'}
                                 {hours < 10 ? `0${hours}` : hours} : {minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}
-                                {'\n'}<Text onPress={_onEditGoal} style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}\t`}
-                                    <Icon2 name="edit" size={16} color={Colors.tab_active_color} />
+                                {'\n'}<Text onPress={startFasting === false ? _onEditGoal : () => {}} style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}\t`}
+                                    {startFasting === false && (<Icon2 name="edit" size={16} color={Colors.tab_active_color} />)}
                                 </Text>
                             </Text>) : (
                                 <Text style={Styles.timerLabel}>
                                     <Text style={Styles.timeElapsedLabel}>{`elapsed time (80%)`}</Text>{'\n'}
                                     {days < 10 ? `0${days}` : days} : {hours < 10 ? `0${hours}` : hours} : {minutes < 10 ? `0${minutes}` : minutes}
                                     <Text style={Styles.secondsSmall}>{' '}{seconds < 10 ? `0${seconds}` : seconds}</Text>
-                                    {'\n'}<Text onPress={_onEditGoal} style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}`}
-                                        <Icon2 name="edit" size={16} color={Colors.tab_active_color} />
+                                    {'\n'}<Text onPress={startFasting === false ? _onEditGoal : () => {}} style={[Styles.timeElapsedLabel, Styles.goalLabel]}>{`GOAL: ${goal} ${timePluralSingular(goalTimeType, goal)?.toUpperCase()}`}
+                                        {startFasting === false && (<Icon2 name="edit" size={16} color={Colors.tab_active_color} />)}
                                     </Text>
                                 </Text>
                             )}
