@@ -44,14 +44,13 @@ export const useFastingTrackerHooks = () => {
     let trackingId = useRef<number | null>(null);
     let appState = useRef(AppState.currentState);
 
-    /** FLAG TO RESET THE BACKGROUND TASK ON STOP */
-    let bgTimerShouldStopFlag = useRef<boolean>(false);
-
     /** VARIABLES */
     const totalSecondsToComplete: number = getTotalSeconds(goalTimeType, goal);
     const timeProgress = totalSecondsElapsed > 0 && totalSecondsToComplete > 0 ? Math.round((totalSecondsElapsed / totalSecondsToComplete) * 100) : 0;
     const tr = 100 - timeProgress;
     const timeRemaining = tr > 0 ? tr : 0;
+
+    let bgTimerShouldStopFlag = false;
 
     const runTimer = () => {
         timerInterval.current = setInterval(() => {
@@ -105,8 +104,8 @@ export const useFastingTrackerHooks = () => {
                 let now = Date.now();  
                 let diffMs = now - start_time;
                 let secondsPassed = Math.floor(diffMs / 1000);
-                let minutesPassed = Math.floor(diffMs / (1000 * 60));
-                let hoursPassed   = Math.floor(diffMs / (1000 * 60 * 60));
+                let minutesPassed = Math.floor(diffMs / (1000 * 60)) % 60;
+                let hoursPassed   = Math.floor(diffMs / (1000 * 60 * 60)) % 24;
                 let daysPassed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
                 let currentSeconds = Math.floor(diffMs / 1000) % 60;
                 
@@ -197,7 +196,7 @@ export const useFastingTrackerHooks = () => {
                 'You have completed your fasting goal! Keep it up.',
                 [
                     {text: "Got it", onPress: async () => {
-                        bgTimerShouldStopFlag.current = true;
+                        bgTimerShouldStopFlag = true;
                         await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
                         await BackgroundService.stop();
                         await updateFastingData(eDate);
@@ -220,7 +219,7 @@ export const useFastingTrackerHooks = () => {
                     'You have completed your fasting goal! Keep it up.',
                     [
                         {text: "Got it", onPress: async () => {
-                            bgTimerShouldStopFlag.current = false;
+                            bgTimerShouldStopFlag = true;
                             await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
                             await BackgroundService.stop();
                             await updateFastingData(eDate);
@@ -319,7 +318,7 @@ export const useFastingTrackerHooks = () => {
         /** WHILE LOOP HAS TO FAIL IN ORDER TO RESET THE TIMER
          *  THUS THE REF FLAG IS NEEDED
          */
-        while (BackgroundService.isRunning() && bgTimerShouldStopFlag.current === false) {            
+        while (BackgroundService.isRunning() && !bgTimerShouldStopFlag) {            
             let elapsed = Date.now() - startTime;
             let hours = Math.floor(elapsed / 3600000);
             let minutes = Math.floor((elapsed % 3600000) / 60000);
@@ -382,7 +381,7 @@ export const useFastingTrackerHooks = () => {
         const start_time = Date.now();
 
         if(startFasting === false) {
-            bgTimerShouldStopFlag.current = false;
+            bgTimerShouldStopFlag = false;
             await BackgroundService.stop();
             await restart();
             setStartFasting(true);
@@ -414,7 +413,7 @@ export const useFastingTrackerHooks = () => {
             setStartDate(sDate);
             await createFastingData(sDate);
         } else {
-            bgTimerShouldStopFlag.current = true;
+            bgTimerShouldStopFlag = true;
             await BackgroundService.stop();
             await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
             setStartFasting(false);
