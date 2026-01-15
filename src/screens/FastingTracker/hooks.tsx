@@ -7,49 +7,48 @@ import {FastingTrackerSubNavi} from "./interafaces";
 import {getTotalSeconds} from "@/helpers/DayTimeFormat";
 import {getFastingHistory} from "@/api/fasting";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import BackgroundService from 'react-native-background-actions';
 import {requestNotificationPermission} from "@/helpers/Permissions";
+import notifee, { AndroidImportance } from '@notifee/react-native';
 
-let bgTimerShouldStopFlag = false;
-let stopResolver: (() => void) | null = null;
+export async function setupFastingChannel() {
+    await notifee.createChannel({
+        id: 'fasting_tracker',
+        name: 'Fasting Tracker',
+        importance: AndroidImportance.DEFAULT,
+    });
+}
 
-const waitForStop = () =>
-  new Promise<void>(resolve => {
-    stopResolver = resolve;
-  });
+export const sleep = (ms: number) =>
+  new Promise(res => setTimeout(res, ms));
 
-const cancellableSleep = (ms: number) =>
-  Promise.race([
-    new Promise(res => setTimeout(res, ms)),
-    waitForStop(),
-  ]);
+let stopService = false;
+export async function startFastingForegroundService(startTime: number, endTime: number) {
+    stopService = false;
 
-const fastingService = async (taskDataArguments: any) => {
-    const {startTime} = taskDataArguments;
+    let diffMs = Date.now() - startTime;
 
-    /** WHILE LOOP HAS TO FAIL IN ORDER TO RESET THE TIMER
-     *  THUS THE REF FLAG IS NEEDED
-     */
-    while (BackgroundService.isRunning() && !bgTimerShouldStopFlag) {            
-        let elapsed = Date.now() - startTime;
-        let hours = Math.floor(elapsed / 3600000);
-        let minutes = Math.floor((elapsed % 3600000) / 60000);
+    let hours = Math.floor(diffMs / 3600000);
+    let minutes = Math.floor((diffMs % 3600000) / 60000);
+    
+    await notifee.displayNotification({
+        id: 'fasting_tracker',
+        title: 'Fasting in progress',
+        body: `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`,
+        android: {
+            channelId: 'fasting_tracker',
+            asForegroundService: true,
+            ongoing: true,
+            smallIcon: 'ic_launcher',
+            color: '#fccc3dff',
+        },
+        data: { startTime, endTime },
+    });
+}
 
-        await BackgroundService.updateNotification({
-            taskDesc: `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`,
-        });
-
-        /** REDUCE SLEEP SO THE BACKGROUND TASK CAN RESET FAST */
-        await cancellableSleep(30000);
-    }
-};
-
-const stopFastingService = async () => {
-    bgTimerShouldStopFlag = true;
-    stopResolver?.(); // 🔥 interrupts sleep immediately
-    stopResolver = null;
-
-    await BackgroundService.stop();
+export const stopFastingForegroundService = async () => {
+    stopService = true;
+    await notifee.stopForegroundService();
+    await notifee.cancelNotification('fasting_tracker');
 };
 
 export const useFastingTrackerHooks = () => {
@@ -91,6 +90,26 @@ export const useFastingTrackerHooks = () => {
     const timeProgress = totalSecondsElapsed > 0 && totalSecondsToComplete > 0 ? Math.round((totalSecondsElapsed / totalSecondsToComplete) * 100) : 0;
     const tr = 100 - timeProgress;
     const timeRemaining = tr > 0 ? tr : 0;
+
+    const stopFastingService = async () => {
+        await stopFastingForegroundService();
+        await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
+        if(timerInterval.current) clearInterval(timerInterval.current);
+
+        const eDate = new Date();
+
+        setEndDate((prevState) => {
+            if(!prevState) return eDate;
+
+            return prevState;
+        });
+
+        setStartFasting((prevState) => {
+            if(prevState === true) return false;
+
+            return prevState;
+        });
+    };
 
     const runTimer = () => {
         timerInterval.current = setInterval(() => {
@@ -155,44 +174,71 @@ export const useFastingTrackerHooks = () => {
                 let alignInterval = 1;
                 let alignIntervalTimer: any = null;
 
-                /** UPDATE IMMEDIATELY */
-                setGoal(goal_val);
-                setGoalTimeType(goal_time_type);
-                setTotalSecondsElapsed(() => secondsPassed);
-                setSeconds(currentSeconds);
-                setMinutes(minutes);
-                setHours(hours);
-                setDays(daysPassed);
+                const secToComplete: number = getTotalSeconds(goal_time_type, goal_val);
+
+                const secToCompleteMin = Math.floor(secToComplete / 60);
+                const secToCompleteSec = secToComplete % 60;
+                const secToCompleteHours = Math.floor((secToComplete % 86400) / 3600);
+                const secToCompleteDays =Math.floor(secToComplete / 86400);
+
+                if(secondsPassed >= secToComplete) {
+                    stopFastingService();
+                    /** UPDATE IMMEDIATELY */
+                    setGoal(goal_val);
+                    setGoalTimeType(goal_time_type);
+                    setTotalSecondsElapsed(secToComplete);
+                    setSeconds(secToCompleteSec);
+                    setMinutes(secToCompleteMin);
+                    setHours(secToCompleteHours);
+                    setDays(secToCompleteDays);
+                } else {
+                    /** UPDATE IMMEDIATELY */
+                    setGoal(goal_val);
+                    setGoalTimeType(goal_time_type);
+                    setTotalSecondsElapsed(secondsPassed);
+                    setSeconds(currentSeconds);
+                    setMinutes(minutes);
+                    setHours(hours);
+                    setDays(daysPassed);
+
+                    setStartFasting(true);
+                    runTimer();
+                }
 
                 /** ALIGN THE VALUE TO THE BACKGROUND TIMER */
-                alignIntervalTimer = setInterval(() => {
-                    if(alignInterval >= 2 && alignIntervalTimer) clearInterval(alignIntervalTimer) 
+                // alignIntervalTimer = setInterval(() => {
+                //     if(alignInterval >= 2 && alignIntervalTimer) clearInterval(alignIntervalTimer) 
                     
-                    now = Date.now();  
-                    diffMs = now - start_time;
-                    secondsPassed = Math.floor(diffMs / 1000);
-                    minutesPassed = Math.floor(diffMs / (1000 * 60));
-                    hoursPassed   = Math.floor(diffMs / (1000 * 60 * 60));
-                    daysPassed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-                    currentSeconds = Math.floor(diffMs / 1000) % 60;
+                //     now = Date.now();  
+                //     diffMs = now - start_time;
+                //     secondsPassed = Math.floor(diffMs / 1000);
+                //     minutesPassed = Math.floor(diffMs / (1000 * 60));
+                //     hoursPassed   = Math.floor(diffMs / (1000 * 60 * 60));
+                //     daysPassed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                //     currentSeconds = Math.floor(diffMs / 1000) % 60;
 
-                    setTotalSecondsElapsed(() => secondsPassed);
-                    setSeconds(() => currentSeconds);
-                    setMinutes(() => minutesPassed);
-                    setHours(() => hoursPassed);
-                    setDays(() => daysPassed);
+                //     hours = Math.floor(diffMs / 3600000);
+                //     minutes = Math.floor((diffMs % 3600000) / 60000);
 
-                    alignInterval += 1;
-                }, 10000)
+                //     setGoal(goal_val);
+                //     setGoalTimeType(goal_time_type);
+                //     setTotalSecondsElapsed(secondsPassed);
+                //     setSeconds(currentSeconds);
+                //     setMinutes(minutes);
+                //     setHours(hours);
+                //     setDays(daysPassed);
 
-                setStartFasting(true);
-                runTimer();
+                //     alignInterval += 1;
+                // }, 10000)
             }
         });
     }
 
     /** REACT HOOKS */
     useEffect(() => {
+        /** CREATE NOTIFICATION CHANNEL */
+        setupFastingChannel();
+
         /** ON MOUNT, AUTO START IF THERE IS A BACKGROUND TIMER RUNNING */
         setCurrentTimer();
 
@@ -217,8 +263,64 @@ export const useFastingTrackerHooks = () => {
         }
     }, [])
 
+    /** INITIALIZE FOREGROUND SERVICE */
     useEffect(() => {
-        if(timeRemaining < 1) {
+        notifee.registerForegroundService(async (notification) => {
+            const { startTime, endTime } = notification.data as any;
+
+            stopService = false;
+
+            while (!stopService) {
+                const diffMs = Date.now() - startTime;
+
+                const hours = Math.floor(diffMs / 3600000);
+                const minutes = Math.floor((diffMs % 3600000) / 60000);
+                let now = Date.now();  
+
+                let secondsPassed = Math.floor(diffMs / 1000);
+
+                if(secondsPassed === endTime) {
+                    stopService = true;
+                    // await notifee.displayNotification({
+                    //     id: 'fasting_tracker',
+                    //     title: 'Fasting Completed',
+                    //     body: `You have successfully completed a ${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes !== 1 ? 's' : ''} fasting!`,
+                    //     android: {
+                    //         channelId: 'fasting_tracker',
+                    //         asForegroundService: true,
+                    //         ongoing: true,
+                    //         smallIcon: 'ic_launcher',
+                    //         color: '#fccc3dff',
+                    //     },
+                    //     data: { startTime, endTime },
+                    // });
+                } else {
+                    // await notifee.displayNotification({
+                    //     id: 'fasting_tracker',
+                    //     title: 'Fasting in progress',
+                    //     body: `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`,
+                    //     android: {
+                    //         channelId: 'fasting_tracker',
+                    //         asForegroundService: true,
+                    //         ongoing: true,
+                    //         smallIcon: 'ic_launcher',
+                    //         color: '#fccc3dff',
+                    //     },
+                    //     data: { startTime, endTime },
+                    // });
+                }
+
+                await sleep(60000);
+            }
+        });
+
+        notifee.onBackgroundEvent(async (notification) => {
+
+        })
+    }, [])
+
+    useEffect(() => {
+        if(timeRemaining < 1 || stopService === true) {
             clearInterval(timerInterval.current);
             const eDate = new Date();
 
@@ -240,38 +342,12 @@ export const useFastingTrackerHooks = () => {
                 [
                     {text: "Got it", onPress: async () => {
                         stopFastingService();
-                        await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
-                        await BackgroundService.stop();
                         await updateFastingData(eDate);
                     }, style: 'cancel'},
                 ]
             );
 
             return;
-        }
-
-        if(startDate !== null && totalSecondsElapsed > 0) {
-            if(totalSecondsElapsed === totalSecondsToComplete) {
-                clearInterval(timerInterval.current);
-                const eDate = new Date();
-                setEndDate(eDate);
-                setStartFasting(false);
-
-                Alert.alert(
-                    'Awesome!',
-                    'You have completed your fasting goal! Keep it up.',
-                    [
-                        {text: "Got it", onPress: async () => {
-                            stopFastingService();
-                            await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
-                            await BackgroundService.stop();
-                            await updateFastingData(eDate);
-                        }, style: 'cancel'},
-                    ]
-                );
-
-                return;
-            }
         }
     }, [startDate, totalSecondsElapsed, totalSecondsToComplete])
 
@@ -354,6 +430,7 @@ export const useFastingTrackerHooks = () => {
     }
 
     const _onStartFasting = async () => {
+        stopService = false;
         const allowed = await requestNotificationPermission();
 
         if(allowed !== undefined && allowed === false) {
@@ -402,41 +479,27 @@ export const useFastingTrackerHooks = () => {
         const start_time = Date.now();
 
         if(startFasting === false) {
-            bgTimerShouldStopFlag = false;
-            await BackgroundService.stop();
-            await restart();
-            setStartFasting(true);
+            try {
+                await restart();
+                setStartFasting(true);
 
-            await AsyncStorage.setItem("CURRENT_ACTIVE_FASTING_TIME", JSON.stringify({
-                start_time, goal_val: goal, goal_time_type: goalTimeType
-            }));
+                await AsyncStorage.setItem("CURRENT_ACTIVE_FASTING_TIME", JSON.stringify({
+                    start_time, goal_val: goal, goal_time_type: goalTimeType
+                }));
 
-            await BackgroundService.start(
-                fastingService,
-                {
-                    taskName: 'Fasting Tracker',
-                    taskTitle: 'Fasting in progress',
-                    taskDesc: 'Starting...',
-                    taskIcon: {
-                        name: 'ic_launcher',
-                        type: 'mipmap',
-                    },
-                    color: '#4CAF50',
-                    parameters: {
-                        startTime: start_time,
-                    },
-                }
-            );
+                /** BACKGROUND SERVICE HERE */
+                startFastingForegroundService(start_time, totalSecondsToComplete);
 
-            runTimer();
+                runTimer();
 
-            const sDate = new Date();
-            setStartDate(sDate);
-            await createFastingData(sDate);
+                const sDate = new Date();
+                setStartDate(sDate);
+                await createFastingData(sDate);
+            } catch (error) {
+                console.log('eeeerrr', error)
+            }
         } else {
             stopFastingService();
-            await BackgroundService.stop();
-            await AsyncStorage.removeItem('CURRENT_ACTIVE_FASTING_TIME');
             setStartFasting(false);
             clearInterval(timerInterval.current);
 
@@ -447,10 +510,12 @@ export const useFastingTrackerHooks = () => {
     }
 
     const _onEditGoal = () => {
+        stopService = false;
         setShowGoalEditor(true);
     }
 
     const _onCloseEditGoal = () => {
+        stopService = false;
         setShowGoalEditor(false);
     }
 
