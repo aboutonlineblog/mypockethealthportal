@@ -91,7 +91,7 @@ const Login = () => {
             </TouchableWithoutFeedback>
 
             <View style={Styles.footerContainer}>
-                <Text style={Styles.copyrightText}>© Copyright 2025 Atomic Devz. All rights reserved.</Text>
+                <Text style={Styles.copyrightText}>© Copyright {new Date().getFullYear()} Atomic Devz. All rights reserved.</Text>
                 <Text style={Styles.versionText}>v{PackageJSON.version}</Text>
             </View>
         </ImageBackground>
